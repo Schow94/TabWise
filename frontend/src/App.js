@@ -8,6 +8,8 @@ import Landing from "./Landing";
 import Navbar from "./Navbar";
 import Review from "./Review";
 import Login from "./Login";
+import Signup from "./Signup";
+import Receipts from "./Receipts";
 
 const App = () => {
 	const [token, setToken] = useState({});
@@ -32,7 +34,12 @@ const App = () => {
 			}
 			setToken(decodedToken);
 		}
-	}, []);
+	}, [token]);
+
+	const addToken = (token) => {
+		setToken(token);
+		localStorage.setItem("token", token);
+	};
 
 	// const clearStorage = () => {
 	// 	localStorage.removeItem("token");
@@ -41,6 +48,7 @@ const App = () => {
 
 	const logout = () => {
 		localStorage.removeItem("token");
+		setToken("");
 	};
 
 	return (
@@ -51,7 +59,9 @@ const App = () => {
 				<Routes>
 					<Route element={<Landing token={token} />} exact path="/" />
 					<Route element={<Review />} exact path="review" />
-					<Route element={<Login />} exact path="login" />
+					<Route element={<Receipts />} exact path="receipts" />
+					<Route element={<Login addToken={addToken} />} exact path="login" />
+					<Route element={<Signup addToken={addToken} />} exact path="signup" />
 				</Routes>
 			</BrowserRouter>
 		</div>

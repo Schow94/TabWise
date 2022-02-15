@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 import "./Landing.css";
 const Landing = ({ token }) => {
 	const user = token["username"];
@@ -13,14 +15,28 @@ const Landing = ({ token }) => {
 
 			<div className="landing-body">
 				{user ? (
-					<button className="upload-receipt-btn">Upload Receipt</button>
+					<Link to="review">
+						<button className="upload-receipt-btn">Upload Receipt</button>
+					</Link>
 				) : null}
 				<div className="testimonial-images-container">
-					<img
-						className="testimonial-img"
-						src="./stefania.jpeg"
-						alt="stefania"></img>
-					<img className="testimonial-img" src="./anne.jpeg" alt="anne"></img>
+					<div className="testimonial-container">
+						<img
+							className="testimonial-img"
+							src="./stefania.jpeg"
+							alt="stefania"
+						/>
+						{/* <p className="testimonial-text">
+							Stefania has improved her social life using TabWise
+						</p> */}
+					</div>
+					<div className="testimonal-container">
+						<img className="testimonial-img" src="./anne.jpeg" alt="anne" />
+						{/* <p className="testimonial-text">
+							Anne has a fast-paced life that doesn't allow her to dwell over
+							the boring things in life
+						</p> */}
+					</div>
 				</div>
 			</div>
 		</>

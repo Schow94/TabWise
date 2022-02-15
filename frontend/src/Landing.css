@@ -3,6 +3,21 @@
 	height: 300px;
 	border-radius: 20px;
 	margin: 2em;
+	background-position: 50%;
+}
+
+.testimonial-container {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+}
+
+.testimonial-text {
+	/* background-color: red; */
+	/* transform: translate(0%, -50%); */
+	height: 100%;
+	width: 100%;
 }
 
 .testimonial-images-container {
@@ -11,6 +26,7 @@
 	justify-content: space-around;
 	align-items: center;
 	width: 40%;
+	/* background-color: green; */
 }
 
 .landing-body {
@@ -49,6 +65,7 @@
 	background-repeat: no-repeat;
 	background-size: cover;
 	position: relative;
+	z-index: 0;
 }
 
 .top-container {

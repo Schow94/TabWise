@@ -9,6 +9,7 @@ const Navbar = ({ token, logout }) => {
 
 	const handleClick = (e) => {
 		e.preventDefault();
+		// For some reason have to refresh page to see logout take effect
 		logout();
 		navigate("/");
 	};
@@ -17,27 +18,26 @@ const Navbar = ({ token, logout }) => {
 		<nav className="navbar">
 			<ul>
 				<li>
-					<Link to="/">Split Receipts</Link>
+					<Link to="/">
+						<img className="logo" alt="logo" src="./tandem.png"></img>
+					</Link>
 				</li>
 
 				<li>
-					<a href="#">Receipts</a>
+					<Link to="receipts">Receipts</Link>
 				</li>
 
-				<li>
-					<a href="#">Download the app</a>
-				</li>
 				{user ? (
 					<>
-						<p>
-							Logged in as <b>{user}</b>
+						<p className="logged-in">
+							Signed in as <div className="current-user-nav">{user}</div>
 						</p>
 						<button onClick={(e) => handleClick(e)}>Logout</button>
 					</>
 				) : (
 					<>
 						<li>
-							<a href="#">Sign Up</a>
+							<Link to="signup">Sign Up</Link>
 						</li>
 
 						<li>

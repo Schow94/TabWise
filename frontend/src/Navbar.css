@@ -1,3 +1,7 @@
+.navbar {
+	z-index: 4;
+}
+
 nav {
 	height: 50px;
 	top: 0;
@@ -29,4 +33,28 @@ ul {
 	justify-content: space-around;
 	align-items: center;
 	height: 100%;
+}
+
+.logo {
+	width: 40px;
+	height: 40px;
+	margin-top: 0.5em;
+	margin-left: 0.5em;
+	left: 0;
+	position: absolute;
+	top: 0;
+	border: none;
+	border-radius: 10px;
+}
+
+.logged-in {
+	display: flex;
+	flex-direction: row;
+	font-size: 18px;
+}
+
+.current-user-nav {
+	margin-left: 0.5em;
+	color: rgb(126, 18, 214);
+	font-weight: 800;
 }

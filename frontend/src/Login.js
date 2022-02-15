@@ -1,13 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
 import jwt from "jwt-decode";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import "./Login.css";
 
 const API_URL = "http://localhost:5000";
 
-const Login = () => {
+const Login = ({ addToken }) => {
 	let navigate = useNavigate();
 
 	// Generic input hook
@@ -44,7 +44,7 @@ const Login = () => {
 
 		const data = await res.data;
 		const token = data;
-		localStorage.setItem("token", token);
+		addToken(token);
 
 		const decodedToken = jwt(res.data);
 		const decodedId = decodedToken.Id;
@@ -67,7 +67,7 @@ const Login = () => {
 	};
 
 	return (
-		<div className="Login">
+		<div className="login-body">
 			<div className="login-container">
 				<form className="form-container" onSubmit={(e) => handleSubmit(e)}>
 					<input
@@ -76,29 +76,25 @@ const Login = () => {
 						name="usernameInput"
 						value={usernameInput}
 						onChange={handleUsernameChange}
+						autoComplete="new-password"
 					/>
-					{/* <input
-						className="input"
-						placeholder="email"
-						name="emailInput"
-						value={emailInput}
-						onChange={handleEmailChange}
-					/> */}
 					<input
 						className="input"
 						placeholder="password"
 						name="passwordInput"
+						type="password"
 						value={passwordInput}
 						onChange={handlePasswordChange}
+						autoComplete="new-password"
 					/>
-					<button>Submit</button>
+					<button>Login</button>
 				</form>
 
 				<div>
 					<p>
-						<a href="#" className="create-account">
+						<Link to="/signup" className="create-account">
 							Create an account
-						</a>
+						</Link>
 					</p>
 				</div>
 			</div>

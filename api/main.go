@@ -179,8 +179,6 @@ func SignUp(c *gin.Context) {
 		log.Fatal(err)
 	}
 
-	// Validate user's email - Don't proceed if invalid
-
 	// Generate "hash" to store from user password - Only for initial signup
 	hashedPw, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
 	if err != nil {
@@ -193,29 +191,26 @@ func SignUp(c *gin.Context) {
 
 	fmt.Println("HASH: ", string(hashedPw))
 
+	// Need to add logic to check if the user already has an account
+	// Send message to user saying that they already have an account
+
 	var newUser = User{
 		Username: u.Username,
 		Password: string(hashedPw),
 		Email:    u.Email,
 	}
 
-	// Store new user's credentials in db
-	// Insert
+	// Store new user's credentials in db (INSERT)
 	db.Create(&newUser)
 
-	// If successfully save user to db, send back a JWT
-	// Issue JWT to user - Send back as JSON
-	// token, err := CreateToken(user.ID)
-	// if err != nil {
-	// 	c.JSON(http.StatusUnprocessableEntity, err.Error())
-	// 	return
-	// }
-	// c.JSON(http.StatusOK, token)
+	// Send back token to user if successfully create account for new user
+	token, err := CreateToken(u.ID, u.Username, u.Email)
+	// Need to handle when credentials are wrong - currently kills the server
+	if err != nil {
+		c.JSON(http.StatusUnprocessableEntity, err.Error())
 
-	// Send user's info in header of jwt??
-	// username, email, etc
-
-	// defer db.Close()
+	}
+	c.JSON(http.StatusOK, token)
 
 }
 
