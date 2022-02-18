@@ -3,23 +3,25 @@ import { Link } from "react-router-dom";
 import Upload from "./Upload";
 
 import "./Landing.css";
-const Landing = ({ user }) => {
+const Landing = ({ user, setReceipt }) => {
 	return (
 		<>
 			<div className="top-bg">
 				<div className="top-container">
-					<h1> Speak with TabWise</h1>
-					<p className="top-slogan">Split any tab - minus the hassle</p>
+					{user ? (
+						<div className="upload-container">
+							<Upload setReceipt={setReceipt} />
+						</div>
+					) : (
+						<>
+							<h1> Speak with TabWise</h1>
+							<p className="top-slogan">Split any tab - minus the hassle</p>
+						</>
+					)}
 				</div>
 			</div>
 
 			<div className="landing-body">
-				{user ? (
-					// <Link to="review">
-					// 	{/* <button className="upload-receipt-btn">Upload Receipt</button> */}
-					// </Link>
-					<Upload />
-				) : null}
 				<div className="testimonial-images-container">
 					<div className="testimonial-container">
 						<img

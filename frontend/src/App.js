@@ -17,6 +17,7 @@ const API_URL = "http://localhost:5000";
 const App = () => {
 	const [token, setToken] = useState({});
 	const [user, setUser] = useState("");
+	const [receipt, setReceipt] = useState({});
 
 	useEffect(() => {
 		const token = localStorage.getItem("token");
@@ -93,11 +94,13 @@ const App = () => {
 
 				<Routes>
 					<Route
-						element={<Landing user={user} token={token} />}
+						element={
+							<Landing setReceipt={setReceipt} user={user} token={token} />
+						}
 						exact
 						path="/"
 					/>
-					<Route element={<Review />} exact path="review" />
+					<Route element={<Review receipt={receipt} />} exact path="review" />
 					<Route element={<Receipts />} exact path="receipts" />
 					<Route element={<Login login={login} />} exact path="login" />
 					<Route element={<Signup addToken={addToken} />} exact path="signup" />

@@ -1,0 +1,47 @@
+.upload-btn {
+	width: 200px;
+	height: 50px;
+	border: none;
+	border-radius: 10px;
+	font-size: 16px;
+	background-color: rgb(18, 143, 216);
+	color: white;
+}
+
+.upload-btn:hover {
+	cursor: pointer;
+	background-color: rgb(11, 104, 158);
+}
+
+.analyze-btn {
+	width: 200px;
+	height: 50px;
+	border: none;
+	border-radius: 10px;
+	font-size: 16px;
+	background-color: rgb(209, 18, 216);
+	color: black;
+	margin: 1em;
+}
+
+.analyze-btn:hover {
+	cursor: pointer;
+	background-color: rgb(150, 15, 155);
+	color: white;
+}
+
+.upload-body {
+	background-color: rgba(230, 230, 230, 0.8);
+	border-radius: 1em;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 50%;
+	padding: 1em;
+}
+
+.receipt-image {
+	width: 400px;
+	border-radius: 10px;
+}

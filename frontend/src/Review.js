@@ -1,15 +1,27 @@
 import React from "react";
 
-import data from "./results.json";
-
 import "./Review.css";
 
-const Review = () => {
-	const renderItems = () => {
-		console.log("DATA: ", data);
+const Review = ({ receipt }) => {
+	// Generic input hook
+	// const useInputState = (initialVal) => {
+	// 	const [val, setVal] = useState(initialVal);
+	// 	const handleChange = (e) => {
+	// 		setVal(e.target.value);
+	// 		// console.log(e.target.name, ": ", val);
+	// 	};
+	// 	const reset = () => {
+	// 		setVal("");
+	// 	};
+	// 	return [val, handleChange, reset];
+	// };
 
-		return data["line_items"].map((x, idx) => {
-			console.log(x);
+	// Going to need a way to have an onChange Handler for dynamic # of inputs/line items in receipt
+
+	const renderItems = () => {
+		console.log("RECEIPT: ", receipt);
+
+		return receipt["line_items"].map((x, idx) => {
 			return (
 				<tr className="item" key={x.id}>
 					<td className="name">
@@ -32,70 +44,72 @@ const Review = () => {
 	return (
 		<div className="bg-body">
 			<div className="review-body">
-				<div className="review-bottom-container">
-					{/* <img className="receipt-img" src="./receipt.jpg" alt="receipt"></img> */}
+				{Object.keys(receipt).length > 0 ? (
+					<div className="review-bottom-container">
+						<div className="sidebar-container">
+							<div className="summary-container">
+								<div className="summary">
+									<div className="total-container">
+										<p>Total Price: </p>
+										<div className="total">
+											<p>${receipt["total"]}</p>
+										</div>
+									</div>
 
-					<div className="sidebar-container">
-						<div className="summary-container">
-							<div className="summary">
-								<div className="total-container">
-									<p>Total Price: </p>
-									<div className="total">
-										<p>${data["total"]}</p>
+									<div className="total-container">
+										<p>Number of people: </p>
+										<div className="total">
+											<p>5</p>
+										</div>
 									</div>
 								</div>
+								<button className="save-receipt-btn">Save receipt</button>
 
-								<div className="total-container">
-									<p>Number of people: </p>
-									<div className="total">
-										<p>5</p>
-									</div>
-								</div>
+								{/* Option to save receipt data via post request */}
+								{/* Receipt has a date, user_id, receipt_id, # ppl, price/person, total_price*/}
+								{/* Each receipt item can be related to a receipt_id */}
 							</div>
-							<button className="save-receipt-btn">Save receipt</button>
 
-							{/* Option to save receipt data via post request */}
-							{/* Receipt has a date, user_id, receipt_id, # ppl, price/person, total_price*/}
-							{/* Each receipt item can be related to a receipt_id */}
-						</div>
-
-						<div className="email-container">
-							<h3>Send Email to Participants</h3>
-							<form>
-								<div className="email">
-									<input className="email-input" placeholder="email"></input>
-									<input className="email-input" placeholder="name"></input>
-								</div>
-
-								<div className="email">
-									<input className="email-input" placeholder="email"></input>
-									<input className="email-input" placeholder="name"></input>
-								</div>
-
-								<div>
-									<div>
-										<button className="recipient-btn">+</button>
-										<button className="recipient-btn">-</button>
+							<div className="email-container">
+								<h3>Send Email to Participants</h3>
+								<form>
+									<div className="email">
+										<input className="email-input" placeholder="email"></input>
+										<input className="email-input" placeholder="name"></input>
 									</div>
 
-									<button className="send-email-btn">Send Email</button>
-								</div>
-							</form>
-						</div>
-					</div>
+									<div className="email">
+										<input className="email-input" placeholder="email"></input>
+										<input className="email-input" placeholder="name"></input>
+									</div>
 
-					<table className="items">
-						<thead>
-							<tr className="item">
-								<th className="name">Item</th>
-								<th className="price">Price</th>
-								<th className="quantity">Quantity</th>
-								<th className="ppp">Price/person</th>
-							</tr>
-						</thead>
-						<tbody>{renderItems()}</tbody>
-					</table>
-				</div>
+									<div>
+										<div>
+											<button className="recipient-btn">+</button>
+											<button className="recipient-btn">-</button>
+										</div>
+
+										<button className="send-email-btn">Send Email</button>
+									</div>
+								</form>
+							</div>
+						</div>
+
+						<table className="items">
+							<thead>
+								<tr className="item">
+									<th className="name">Item</th>
+									<th className="price">Price</th>
+									<th className="quantity">Quantity</th>
+									<th className="ppp">Price/person</th>
+								</tr>
+							</thead>
+							<tbody>{renderItems()}</tbody>
+						</table>
+					</div>
+				) : (
+					"Please upload a receipt first"
+				)}
 			</div>
 		</div>
 	);
