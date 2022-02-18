@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import jwt from "jwt-decode";
+import axios from "axios";
 
 import "./App.css";
 
@@ -11,11 +12,15 @@ import Login from "./Login";
 import Signup from "./Signup";
 import Receipts from "./Receipts";
 
+const API_URL = "http://localhost:5000";
+
 const App = () => {
 	const [token, setToken] = useState({});
+	const [user, setUser] = useState("");
 
 	useEffect(() => {
 		const token = localStorage.getItem("token");
+
 		if (token) {
 			let decodedToken = jwt(token);
 			const expireDate = decodedToken.exp;
@@ -31,10 +36,13 @@ const App = () => {
 				//logout here
 				decodedToken = {};
 				localStorage.removeItem("token");
+				return;
 			}
+
 			setToken(decodedToken);
+			setUser(decodedToken["username"]);
 		}
-	}, [token]);
+	}, []);
 
 	const addToken = (token) => {
 		setToken(token);
@@ -46,6 +54,33 @@ const App = () => {
 	// 	setToken({});
 	// };
 
+	// Login
+	const login = async (e, usernameInput, passwordInput) => {
+		e.preventDefault();
+		const res = await axios({
+			method: "POST",
+			url: `${API_URL}/login`,
+			data: {
+				username: usernameInput,
+				password: passwordInput,
+			},
+		});
+
+		const data = await res.data;
+		const token = data;
+		addToken(token);
+
+		const decodedToken = jwt(res.data);
+		const decodedId = decodedToken.Id;
+		const decodedUser = decodedToken.username;
+		const decodedEmail = decodedToken.email;
+
+		console.log("DECODED TOKEN: ", decodedToken);
+		console.log("You are logged in as: ", decodedUser);
+		setUser(decodedUser);
+		// store returned user somehow
+	};
+
 	const logout = () => {
 		localStorage.removeItem("token");
 		setToken("");
@@ -54,13 +89,17 @@ const App = () => {
 	return (
 		<div className="App">
 			<BrowserRouter>
-				<Navbar token={token} logout={logout} />
+				<Navbar token={token} user={user} logout={logout} />
 
 				<Routes>
-					<Route element={<Landing token={token} />} exact path="/" />
+					<Route
+						element={<Landing user={user} token={token} />}
+						exact
+						path="/"
+					/>
 					<Route element={<Review />} exact path="review" />
 					<Route element={<Receipts />} exact path="receipts" />
-					<Route element={<Login addToken={addToken} />} exact path="login" />
+					<Route element={<Login login={login} />} exact path="login" />
 					<Route element={<Signup addToken={addToken} />} exact path="signup" />
 				</Routes>
 			</BrowserRouter>

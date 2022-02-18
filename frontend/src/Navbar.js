@@ -3,9 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 
 import "./Navbar.css";
 
-const Navbar = ({ token, logout }) => {
+const Navbar = ({ user, logout }) => {
 	const navigate = useNavigate();
-	const user = token["username"];
 
 	const handleClick = (e) => {
 		e.preventDefault();

@@ -1,13 +1,9 @@
 import { useState } from "react";
-import axios from "axios";
-import jwt from "jwt-decode";
 import { useNavigate, Link } from "react-router-dom";
 
 import "./Login.css";
 
-const API_URL = "http://localhost:5000";
-
-const Login = ({ addToken }) => {
+const Login = ({ login }) => {
 	let navigate = useNavigate();
 
 	// Generic input hook
@@ -30,40 +26,13 @@ const Login = ({ addToken }) => {
 	const [passwordInput, handlePasswordChange, resetPassword] =
 		useInputState("");
 
-	// Login
-	const login = async (e) => {
-		e.preventDefault();
-		const res = await axios({
-			method: "POST",
-			url: `${API_URL}/login`,
-			data: {
-				username: usernameInput,
-				password: passwordInput,
-			},
-		});
-
-		const data = await res.data;
-		const token = data;
-		addToken(token);
-
-		const decodedToken = jwt(res.data);
-		const decodedId = decodedToken.Id;
-		const decodedUser = decodedToken.username;
-		const decodedEmail = decodedToken.email;
-
-		console.log("DECODED TOKEN: ", decodedToken);
-		console.log("You are logged in as: ", decodedUser);
-		// store returned user somehow
-
+	const handleSubmit = (e) => {
+		login(e, usernameInput, passwordInput);
+		navigate("/");
 		//Clear form - This doesn't work
 		resetUsername();
 		// resetEmail();
 		resetPassword();
-		navigate("/");
-	};
-
-	const handleSubmit = (e) => {
-		login(e);
 	};
 
 	return (

@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Upload from "./Upload";
 
 import "./Landing.css";
-const Landing = ({ token }) => {
-	const user = token["username"];
+const Landing = ({ user }) => {
 	return (
 		<>
 			<div className="top-bg">
@@ -15,9 +15,10 @@ const Landing = ({ token }) => {
 
 			<div className="landing-body">
 				{user ? (
-					<Link to="review">
-						<button className="upload-receipt-btn">Upload Receipt</button>
-					</Link>
+					// <Link to="review">
+					// 	{/* <button className="upload-receipt-btn">Upload Receipt</button> */}
+					// </Link>
+					<Upload />
 				) : null}
 				<div className="testimonial-images-container">
 					<div className="testimonial-container">

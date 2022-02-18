@@ -2,8 +2,12 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
+	"io"
+	"io/ioutil"
 	"log"
+	"mime/multipart"
 	"net/http"
 	"os"
 	"time"
@@ -31,6 +35,10 @@ type customClaims struct {
 	jwt.StandardClaims
 }
 
+type Image struct {
+	FileData *multipart.FileHeader `form:"file"`
+}
+
 var db *sql.DB
 
 // Load env contents
@@ -41,6 +49,7 @@ func init() {
 	}
 }
 
+// ------------------ JWT LOGIC ------------------
 func CreateToken(id uint64, username string, email string) (string, error) {
 	var err error
 	//Creating Access Token
@@ -58,11 +67,6 @@ func CreateToken(id uint64, username string, email string) (string, error) {
 		},
 	}
 
-	// atClaims := jwt.MapClaims{}
-	// atClaims["authorized"] = true
-	// atClaims["exp"] = time.Now().Add(time.Minute * 15).Unix()
-	// at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
-	// token, err := at.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	signedToken, err := token.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
 
@@ -108,7 +112,7 @@ func CreateToken(id uint64, username string, email string) (string, error) {
 //     return nil
 // }
 
-// ------------------------------- ROUTES -------------------------------
+// ------------------------------- AUTH ROUTES -------------------------------
 // ------------------------------- LOGIN ROUTE -------------------------------
 func Login(c *gin.Context) {
 	var u User // u is json we receive from POST request
@@ -214,6 +218,65 @@ func SignUp(c *gin.Context) {
 
 }
 
+// ------------------ CRUD ROUTES ------------------
+func ImageUpload(c *gin.Context) {
+	fmt.Println("IMAGE ROUTE!!!")
+
+	file, header, err := c.Request.FormFile("image")
+	filename := header.Filename
+
+	// Save receipt to tmp directory temporarily while we extract json from it
+	out, err := os.Create("./tmp/" + filename)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer os.Remove(out.Name())
+	defer out.Close()
+
+	// Timeout to confirm that I'm actually saving photo to directory for a second
+	time.Sleep(time.Second * 3)
+
+	fmt.Println("IMAGE: ", header.Filename)
+
+	_, err = io.Copy(out, file)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Extract data using OCR microservice here
+	// Save results temporarily to results.json
+	// Read results.json & send back to client until I have the microservice
+	extractedData := extractReceipt()
+	c.JSON(http.StatusOK, extractedData)
+}
+
+// Extracts data from receipt & sends back json to client
+func extractReceipt() map[string]interface{} {
+	fmt.Println("Extracting receipt!!!")
+	jsonFile, err := os.Open("results.json")
+	// if we os.Open returns an error then handle it
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("Opening results.json")
+
+	defer jsonFile.Close()
+
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+
+	fmt.Println("Reading results.json")
+
+	var result map[string]interface{}
+	json.Unmarshal([]byte(byteValue), &result)
+
+	// defer the closing of our jsonFile so that we can parse it later on
+	return result
+}
+
+// -------------------------- MAIN  --------------------------
 func main() {
 	router := gin.Default()
 
@@ -226,9 +289,12 @@ func main() {
 
 	router.POST("/login", Login)
 	router.POST("/signup", SignUp)
+	router.POST("/image", ImageUpload)
 
 	log.Fatal(router.Run(":8080"))
 }
+
+// ------------------ POSTGRESQL NOTES ------------------
 
 // CREATE TABLE users (
 //     id SERIAL PRIMARY KEY,
