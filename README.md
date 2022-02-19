@@ -5,12 +5,10 @@
 - Web application that takes an image of a receipt as an input and extracts data from the receipt. Once data is extraced, it's parsed into a web form so user can make changes to the receipt data. User can then determine how many people to split the bill with and send the bill to each receipient via email.
 
 ### Landing Page
-
-![Screen Shot 2022-02-11 at 10 37 20 PM](https://user-images.githubusercontent.com/24352472/153700243-0eac15b4-80cb-4cf2-882f-ad433531f572.png)
+![Screen Shot 2022-02-18 at 9 47 30 PM](https://user-images.githubusercontent.com/24352472/154788259-9895627c-701f-4464-b943-9599fcbe4d90.png)
 
 ### Login Page
-
-![Screen Shot 2022-02-11 at 10 37 03 PM](https://user-images.githubusercontent.com/24352472/153700245-65725e51-9ab7-42a1-af09-7f91d2ea9fcf.png)
+![Screen Shot 2022-02-18 at 9 47 54 PM](https://user-images.githubusercontent.com/24352472/154788264-48d1e8e5-e0a7-4f51-92ae-47ef236f179a.png)
 
 ### Receipt Review Page
 
