@@ -276,6 +276,40 @@ func extractReceipt() map[string]interface{} {
 	return result
 }
 
+// Get Receipts
+func GetReceipts(c *gin.Context) {
+	fmt.Println("GET RECEIPTS ROUTE")
+
+	extractedData := findReceipts()
+	c.JSON(http.StatusOK, extractedData)
+
+}
+
+// Find all receipts from "db"
+func findReceipts() []map[string]interface{} {
+	fmt.Println("Finding receipts!!!")
+	jsonFile, err := os.Open("receipts.json")
+	// if we os.Open returns an error then handle it
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("Opening receipts.json")
+
+	defer jsonFile.Close()
+
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+
+	fmt.Println("Reading results.json")
+
+	// Save receipts.json to arr of JSON
+	var result []map[string]interface{}
+	json.Unmarshal([]byte(byteValue), &result)
+
+	// defer the closing of our jsonFile so that we can parse it later on
+	return result
+}
+
 // -------------------------- MAIN  --------------------------
 func main() {
 	router := gin.Default()
@@ -290,6 +324,7 @@ func main() {
 	router.POST("/login", Login)
 	router.POST("/signup", SignUp)
 	router.POST("/image", ImageUpload)
+	router.GET("/receipts", GetReceipts)
 
 	log.Fatal(router.Run(":8080"))
 }
