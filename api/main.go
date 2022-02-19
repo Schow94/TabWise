@@ -282,7 +282,6 @@ func GetReceipts(c *gin.Context) {
 
 	extractedData := findReceipts()
 	c.JSON(http.StatusOK, extractedData)
-
 }
 
 // Find all receipts from "db"
@@ -310,6 +309,19 @@ func findReceipts() []map[string]interface{} {
 	return result
 }
 
+// Get Receipts
+func GetReceipt(c *gin.Context) {
+	fmt.Println("GET A RECEIPT ROUTE")
+
+	id := c.Request.URL.Query()
+	// id := c.Param("id")
+	fmt.Println("URL PARAMS: ", id)
+	// Eventually will look for receipt in db using id from URL param
+	extractedData := extractReceipt()
+	c.JSON(http.StatusOK, extractedData)
+
+}
+
 // -------------------------- MAIN  --------------------------
 func main() {
 	router := gin.Default()
@@ -325,6 +337,7 @@ func main() {
 	router.POST("/signup", SignUp)
 	router.POST("/image", ImageUpload)
 	router.GET("/receipts", GetReceipts)
+	router.GET("/receipt/:id", GetReceipt)
 
 	log.Fatal(router.Run(":8080"))
 }
