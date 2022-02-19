@@ -108,7 +108,9 @@ const Review = ({ receipt }) => {
 						</table>
 					</div>
 				) : (
-					"Please upload a receipt first"
+					<div className="no-receipt">
+						<h1>Please upload a receipt first</h1>
+					</div>
 				)}
 			</div>
 		</div>

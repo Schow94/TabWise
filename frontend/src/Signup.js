@@ -69,7 +69,7 @@ const Signup = ({ addToken }) => {
 	};
 
 	return (
-		<div className="login-body">
+		<div className="login-bg">
 			<div className="login-container">
 				<form
 					className="form-container"
@@ -100,7 +100,7 @@ const Signup = ({ addToken }) => {
 						onChange={handlePasswordChange}
 						autoComplete="new-password"
 					/>
-					<button className="create-account">Sign Up</button>
+					<button className="login-btn">Sign Up</button>
 				</form>
 			</div>
 		</div>

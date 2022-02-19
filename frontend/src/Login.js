@@ -36,7 +36,7 @@ const Login = ({ login }) => {
 	};
 
 	return (
-		<div className="login-body">
+		<div className="login-bg">
 			<div className="login-container">
 				<form className="form-container" onSubmit={(e) => handleSubmit(e)}>
 					<input
@@ -56,16 +56,14 @@ const Login = ({ login }) => {
 						onChange={handlePasswordChange}
 						autoComplete="new-password"
 					/>
-					<button>Login</button>
+					<button className="login-btn">Login</button>
 				</form>
 
-				<div>
-					<p>
-						<Link to="/signup" className="create-account">
-							Create an account
-						</Link>
-					</p>
-				</div>
+				<button className="create-account-btn">
+					<Link className="create-account" to="/signup">
+						Sign Up{" "}
+					</Link>
+				</button>
 			</div>
 		</div>
 	);
