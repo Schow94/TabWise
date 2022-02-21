@@ -35,3 +35,18 @@
 .table-title {
 	color: rgb(49, 107, 214);
 }
+
+.receipt-link {
+	color: rgb(83, 36, 255);
+	text-decoration: underline;
+}
+
+.receipt-link:hover {
+	cursor: pointer;
+}
+
+.receipt-row th {
+	width: 25%;
+	color: rgb(0, 192, 134);
+	padding-top: 1em;
+}

@@ -101,9 +101,21 @@ const App = () => {
 						exact
 						path="/"
 					/>
-					<Route element={<Review receipt={receipt} />} exact path="review" />
-					<Route element={<Receipts />} exact path="receipts" />
-					<Route element={<Receipt />} exact path="receipt/:id" />
+					<Route
+						element={<Review token={token} user={user} receipt={receipt} />}
+						exact
+						path="review"
+					/>
+					<Route
+						element={<Receipts token={token} user={user} />}
+						exact
+						path="receipts"
+					/>
+					<Route
+						element={<Receipt token={token} user={user} />}
+						exact
+						path="receipt/:id"
+					/>
 					<Route element={<Login login={login} />} exact path="login" />
 					<Route element={<Signup addToken={addToken} />} exact path="signup" />
 				</Routes>
