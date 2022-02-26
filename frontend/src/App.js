@@ -19,6 +19,7 @@ const App = () => {
 	const [token, setToken] = useState({});
 	const [user, setUser] = useState("");
 	const [receipt, setReceipt] = useState({});
+	const [receiptUploading, setReceiptUploading] = useState(false);
 
 	useEffect(() => {
 		const token = localStorage.getItem("token");
@@ -96,7 +97,13 @@ const App = () => {
 				<Routes>
 					<Route
 						element={
-							<Landing setReceipt={setReceipt} user={user} token={token} />
+							<Landing
+								setReceipt={setReceipt}
+								receiptUploading={receiptUploading}
+								setReceiptUploading={setReceiptUploading}
+								user={user}
+								token={token}
+							/>
 						}
 						exact
 						path="/"

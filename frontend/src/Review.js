@@ -1,43 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
+
+import LineItem from "./LineItem";
 
 import "./Review.css";
 
+const API_URL = "http://localhost:5000";
+
 const Review = ({ receipt, token, user }) => {
-	// Generic input hook
-	// const useInputState = (initialVal) => {
-	// 	const [val, setVal] = useState(initialVal);
-	// 	const handleChange = (e) => {
-	// 		setVal(e.target.value);
-	// 		// console.log(e.target.name, ": ", val);
-	// 	};
-	// 	const reset = () => {
-	// 		setVal("");
-	// 	};
-	// 	return [val, handleChange, reset];
-	// };
-
-	// Going to need a way to have an onChange Handler for dynamic # of inputs/line items in receipt
-
 	const renderItems = () => {
+		return receipt["line_items"].map((x, idx) => {
+			return <LineItem item={x} />;
+		});
+	};
+
+	const handleClick = async () => {
 		console.log("RECEIPT: ", receipt);
 
-		return receipt["line_items"].map((x, idx) => {
-			return (
-				<tr className="item" key={x.id}>
-					<td className="name">
-						<input className="receipt-input" value={x.description}></input>
-					</td>
-					<td className="price">
-						$<input className="receipt-input" value={x.total}></input>
-					</td>
-					<td className="quantity">
-						<input className="receipt-input" value={x.quantity}></input>
-					</td>
-					<td className="ppp">
-						<input className="receipt-input" value={x.quantity}></input>
-					</td>
-				</tr>
-			);
+		// Save receipt to db
+		const res = await axios({
+			method: "POST",
+			url: `${API_URL}/receipts`,
+			data: receipt,
 		});
 	};
 
@@ -64,7 +48,11 @@ const Review = ({ receipt, token, user }) => {
 											</div>
 										</div>
 									</div>
-									<button className="save-receipt-btn">Save receipt</button>
+									<button
+										onClick={() => handleClick()}
+										className="save-receipt-btn">
+										Save receipt
+									</button>
 
 									{/* Option to save receipt data via post request */}
 									{/* Receipt has a date, user_id, receipt_id, # ppl, price/person, total_price*/}

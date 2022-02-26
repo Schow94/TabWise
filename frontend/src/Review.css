@@ -233,3 +233,8 @@ td {
 	color: red;
 	font-size: 25px;
 }
+
+.save-receipt-btn:hover {
+	cursor: pointer;
+	color: black;
+}

@@ -80,7 +80,7 @@ const Receipt = ({ token, user }) => {
 
 							<table className="receipt-table">
 								<thead>
-									<tr className="8 th">
+									<tr className="th">
 										<th>Item</th>
 										<th>Price</th>
 										<th>Quantity</th>

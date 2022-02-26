@@ -39,6 +39,30 @@ type Image struct {
 	FileData *multipart.FileHeader `form:"file"`
 }
 
+type Receipt struct {
+	ID               int
+	User_Id          int
+	Receipt_Price    float64
+	Num_People       int
+	Transaction_Date string
+	Category         string
+	Receipt_PPP      float64
+	Vendor_Name      string
+	Vendor_Address   string
+	Vendor_Phone     string
+	Vendor_URL       string
+	Payment          string
+}
+
+type Item struct {
+	ID          int
+	Receipt_ID  int
+	Description string
+	Item_Price  float64
+	Quantity    float64
+	Item_PPP    float64
+}
+
 var db *sql.DB
 
 // Load env contents
@@ -124,7 +148,7 @@ func Login(c *gin.Context) {
 	}
 	// // Initialize Postgres db
 	db, err := gorm.Open(postgres.New(postgres.Config{
-		DSN:                  "user=stephenchow dbname=gojwt",
+		DSN:                  "user=stephenchow dbname=tabwise",
 		PreferSimpleProtocol: true, // disables implicit prepared statement usage
 	}), &gorm.Config{})
 	if err != nil {
@@ -176,7 +200,7 @@ func SignUp(c *gin.Context) {
 
 	// Initialize Postgres db
 	db, err := gorm.Open(postgres.New(postgres.Config{
-		DSN:                  "user=stephenchow dbname=gojwt",
+		DSN:                  "user=stephenchow dbname=tabwise",
 		PreferSimpleProtocol: true, // disables implicit prepared statement usage
 	}), &gorm.Config{})
 	if err != nil {
@@ -322,34 +346,86 @@ func GetReceipt(c *gin.Context) {
 
 }
 
+// Add Receipt to dbs
+func saveReceipt(c *gin.Context) {
+
+	// Initialize Postgres db
+	db, err := gorm.Open(postgres.New(postgres.Config{
+		DSN:                  "user=stephenchow dbname=tabwise",
+		PreferSimpleProtocol: true, // disables implicit prepared statement usage
+	}), &gorm.Config{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// data, _ := ioutil.ReadAll(c.Request.Body)
+	// fmt.Println("DATA: ", data)
+	// 1) Insert receipt in receipts table
+	//		- Wait for receipt_id
+
+	newReceipt := Receipt{
+		User_Id:          1,
+		Receipt_Price:    50,
+		Num_People:       1,
+		Transaction_Date: "2023-03-01",
+		Category:         "Leisure",
+		Receipt_PPP:      50,
+		Vendor_Name:      "Taco Bell",
+		Vendor_Address:   "12345 Street",
+		Vendor_Phone:     "(234)324-2348",
+		Vendor_URL:       "www.tacobell.com",
+		Payment:          "MC***1234",
+	}
+
+	// Store new user's credentials in db (INSERT)
+	addReceipt := db.Create(&newReceipt)
+
+	// 2) Once we have receipt_id, insert all items
+	//		- Each item gets it's own row
+	//		- Either loop through items and add individually or see if we can bulk add multiple rows
+
+	receipt_id := newReceipt.ID
+	fmt.Println("RECEIPT ID: ", receipt_id)
+
+	var AddReceiptErr = addReceipt.Error
+	if AddReceiptErr != nil {
+		fmt.Println("POSTGRES ERROR: ", AddReceiptErr)
+	}
+
+	items := []Item{
+		{
+			Receipt_ID:  receipt_id,
+			Description: "Very good pizza",
+			Item_Price:  240,
+			Quantity:    1,
+			Item_PPP:    240,
+		},
+	}
+
+	numItems := len(items)
+	addItems := db.CreateInBatches(&items, numItems)
+
+	var AddItemsErr = addItems.Error
+	if AddItemsErr != nil {
+		fmt.Println("POSTGRES ERROR: ", AddItemsErr)
+	}
+
+	fmt.Println("LINE ITEMS ADDED: ", addItems)
+
+}
+
 // -------------------------- MAIN  --------------------------
 func main() {
 	router := gin.Default()
 
 	router.Use(cors.Default())
 
-	// db.First(&user)
-	// fmt.Println("FOUND USERS: ", user)
-	// sqlDB, err := db.DB()
-	// db.Create(&User{})
-
 	router.POST("/login", Login)
 	router.POST("/signup", SignUp)
 	router.POST("/image", ImageUpload)
 	router.GET("/receipts", GetReceipts)
+	router.POST("/receipts", saveReceipt)
 	router.GET("/receipt/:id", GetReceipt)
 
 	log.Fatal(router.Run(":8080"))
 }
-
-// ------------------ POSTGRESQL NOTES ------------------
-
-// CREATE TABLE users (
-//     id SERIAL PRIMARY KEY,
-//     username TEXT NOT NULL UNIQUE,
-//     password VARCHAR(100) NOT NULL,
-//     email TEXT NOT NULL,
-//     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-// )
-
-// INSERT INTO users(username, password, email) VALUES('Bob', 'unhackablepassword','bob@gmail.com')

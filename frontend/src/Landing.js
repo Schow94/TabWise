@@ -3,14 +3,23 @@ import { Link } from "react-router-dom";
 import Upload from "./Upload";
 
 import "./Landing.css";
-const Landing = ({ user, setReceipt }) => {
+const Landing = ({
+	user,
+	setReceipt,
+	receiptUploading,
+	setReceiptUploading,
+}) => {
 	return (
 		<>
 			<div className="top-bg">
 				<div className="top-container">
 					{user ? (
 						<div className="upload-container">
-							<Upload setReceipt={setReceipt} />
+							<Upload
+								receiptUploading={receiptUploading}
+								setReceiptUploading={setReceiptUploading}
+								setReceipt={setReceipt}
+							/>
 						</div>
 					) : (
 						<>

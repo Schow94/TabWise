@@ -1,15 +1,14 @@
-import axios from "axios";
-import React from "react";
-import ImageUploading from "react-images-uploading";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import ImageUploading from "react-images-uploading";
 
 import "./Upload.css";
 
 const API_URL = "http://localhost:5000";
 
-const Upload = ({ setReceipt }) => {
+const Upload = ({ setReceipt, receiptUploading, setReceiptUploading }) => {
 	let navigate = useNavigate();
-
 	const [images, setImages] = React.useState([]);
 	const maxNumber = 1;
 
@@ -20,22 +19,29 @@ const Upload = ({ setReceipt }) => {
 	};
 
 	const onSubmit = async (remove) => {
+		setReceiptUploading(true);
 		let formData = new FormData();
-		formData.append("image", images[0]["file"]);
+		formData.append("receipt", images[0]["file"]);
+		console.log("FORM DATA: ", formData);
 		console.log("IMAGE: ", images[0]);
 
-		// Send image to backend
-		const response = await axios.post(`${API_URL}/image`, formData, {
+		// OCR Microservice
+		const response = await axios({
+			method: "post",
+			url: `http://localhost:8000/parse_receipt`,
+			data: formData,
 			headers: {
 				"Content-Type": "multipart/form-data",
 			},
 		});
 
+		await setReceiptUploading(false);
+
 		// Remove image from UI
 		remove(0);
-
+		const data = response.data.data;
 		// Save receipt to state
-		setReceipt(response.data);
+		setReceipt(data);
 		// Navigate user to review page once we get response back from backend
 		navigate("/review");
 	};
@@ -85,7 +91,7 @@ const Upload = ({ setReceipt }) => {
 						<button
 							className="analyze-btn"
 							onClick={() => onSubmit(onImageRemove)}>
-							Analyze Receipt
+							{receiptUploading ? `Uploading...` : `Analyze Receipt`}
 						</button>
 					) : null}
 				</div>
