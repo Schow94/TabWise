@@ -51,8 +51,8 @@ type Receipt struct {
 	Vendor_Address   string
 	Vendor_Phone     string
 	Vendor_URL       string
-	// Vendor_Logo      string
-	Payment string
+	Vendor_Logo      string
+	Payment          string
 }
 
 type Item struct {
@@ -71,12 +71,13 @@ type AddReceipt struct {
 	Receipt_Price    float64
 	Num_People       int
 	Transaction_Date string
-	Category         string `json:"category" binding:"required"`
+	Category         string
 	Receipt_PPP      float64
 	Vendor_Name      string
 	Vendor_Address   string
 	Vendor_Phone     string
 	Vendor_URL       string
+	Vendor_Logo      string
 	Payment          string
 	Line_Items       Items
 }
@@ -94,8 +95,6 @@ func init() {
 // ------------------ JWT LOGIC ------------------
 func CreateToken(id uint64, username string, email string) (string, error) {
 	var err error
-	//Creating Access Token
-	// os.Setenv("ACCESS_SECRET", "jdnfksdmfksd") //this should be in an env file
 
 	claims := customClaims{
 		Id:       id,
@@ -173,17 +172,12 @@ func Login(c *gin.Context) {
 		log.Fatal(err)
 	}
 
-	fmt.Println("PROVIDED USER: ", u.Username)
+	// fmt.Println("PROVIDED USER: ", u.Username)
 	// Query db for that username (unique)
 	db.Where("username = ?", u.Username).First(&foundUser)
-	fmt.Println("FOUND USER: ", foundUser)
+	// fmt.Println("FOUND USER: ", foundUser)
 	// Compare hashed pw to pw provided by person
 	// If hash is valid, issue JWT to user
-
-	// Send user's info in header of jwt??
-	// username, email, etc
-
-	fmt.Println("HASH: ", string(u.Password))
 
 	// Compare the entered password vs stored hashed pw
 	if err := bcrypt.CompareHashAndPassword([]byte(foundUser.Password), []byte(u.Password)); err != nil {
@@ -401,8 +395,8 @@ func saveReceipt(c *gin.Context) {
 		Vendor_Address:   incomingReceipt.Vendor_Address,
 		Vendor_Phone:     incomingReceipt.Vendor_Phone,
 		Vendor_URL:       incomingReceipt.Vendor_URL,
-		// Vendor_Logo:       incomingReceipt.Vendor_Logo,
-		Payment: incomingReceipt.Payment,
+		Vendor_Logo:      incomingReceipt.Vendor_Logo,
+		Payment:          incomingReceipt.Payment,
 	}
 
 	// f, _ := json.MarshalIndent(newReceipt, "", "\t")
