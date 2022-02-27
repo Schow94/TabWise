@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import "./Navbar.css";
 
-const Navbar = ({ user, logout }) => {
+const Navbar = ({ user, logout, token }) => {
 	const navigate = useNavigate();
 
 	const handleClick = (e) => {
@@ -18,19 +18,20 @@ const Navbar = ({ user, logout }) => {
 			<ul>
 				<li>
 					<Link to="/">
+						{/* Need to fix path to tandem.png when not in App.js. Route to image is incorrect */}
 						<img className="logo" alt="logo" src="./tandem.png"></img>
 					</Link>
 				</li>
 
 				<li>
-					<Link to="receipts">Receipts</Link>
+					<Link to={`receipts/${user.id}`}>Receipts</Link>
 				</li>
 
-				{user ? (
+				{user && token ? (
 					<>
 						<p className="logged-in">
-							Signed in as{" "}
-							<div className="current-user-nav">{user.username}</div>
+							Signed in as
+							<span className="current-user-nav">{user.username}</span>
 						</p>
 						<button onClick={(e) => handleClick(e)}>Logout</button>
 					</>

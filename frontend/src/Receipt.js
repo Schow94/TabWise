@@ -9,7 +9,9 @@ const API_URL = "http://localhost:5000";
 
 const Receipt = ({ token, user }) => {
 	const [receipt, setReceipt] = useState({});
-	const [people, setPeople] = useState(5);
+	// Theres also a numPeople state in App.js
+	// Need to change to use only 1 state at some point
+	// const [people, setPeople] = useState(receipt["num_people"]);
 	const { id } = useParams();
 
 	useEffect(() => {
@@ -19,18 +21,21 @@ const Receipt = ({ token, user }) => {
 	const getReceipt = async (id) => {
 		const response = await axios.get(`${API_URL}/receipt/${id}`);
 		setReceipt(response.data);
+		// setPeople(receipt["num_people"]);
 	};
 
 	const renderItems = () => {
 		console.log("RECEIPT:", receipt);
-		return receipt["line_items"].map((r, idx) => {
+		return receipt["line_items"].map((r) => {
 			return (
 				<>
-					<tr className="item-row" key={idx}>
+					<tr className="item-row" key={r.item_id}>
 						<td>{r["description"]}</td>
-						<td>${r["total"]}</td>
+						<td>${r["item_price"]}</td>
 						<td>{r["quantity"]}</td>
-						<td>{`$${parseFloat(r["total"] / people).toFixed(2)}`}</td>
+						<td>{`$${parseFloat(
+							r["item_price"] / receipt["num_people"]
+						).toFixed(2)}`}</td>
 					</tr>
 					<hr />
 				</>
@@ -49,32 +54,36 @@ const Receipt = ({ token, user }) => {
 									<div className="vendor-title">
 										<img
 											className="vendor-icon"
-											src={receipt["vendor"]["vendor_logo"]}
-											alt={receipt["vendor"]["raw_name"]}
+											src={receipt["vendor_logo"]}
+											alt={receipt["vendor_name"]}
 										/>
 										<h1 className="table-title">
-											{`${receipt["vendor"]["raw_name"]}`}
+											{`${receipt["vendor_name"]}`}
 										</h1>
 									</div>
 									<div className="vendor-info">
-										<p>{receipt["vendor"]["address"]}</p>
-										<p>{receipt["vendor"]["phone_number"]}</p>
-										<p>{receipt["vendor"]["web"]}</p>
-										<p>Category: {receipt["vendor"]["category"]}</p>
+										<p>{receipt["vendor_address"]}</p>
+										<p>{receipt["vendor_phone"]}</p>
+										<p>{receipt["vendor_url"]}</p>
+										<p>Category: {receipt["category"]}</p>
 									</div>
 								</div>
 
 								<div className="transaction-summary">
-									<p>Transaction Date: {receipt["date"].slice(0, 10)}</p>
-
-									<p>Total: ${receipt["total"]}</p>
-									<p>People: {people}</p>
 									<p>
-										Price/person: $
-										{parseFloat(receipt["total"] / people).toFixed(2)}
+										Transaction Date: {receipt["transaction_date"].slice(0, 10)}
 									</p>
 
-									<p>Payment: {receipt["payment_display_name"]}</p>
+									<p>Total: ${receipt["receipt_price"]}</p>
+									<p>People: {receipt["num_people"]}</p>
+									<p>
+										Price/person: $
+										{parseFloat(
+											receipt["receipt_price"] / receipt["num_people"]
+										).toFixed(2)}
+									</p>
+
+									<p>Payment: {receipt["payment"]}</p>
 								</div>
 							</div>
 

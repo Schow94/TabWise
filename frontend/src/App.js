@@ -19,6 +19,7 @@ const App = () => {
 	const [token, setToken] = useState({});
 	const [user, setUser] = useState({});
 	const [receipt, setReceipt] = useState({});
+	// const [receipts, setReceipts] = useState({});
 	const [numPeople, setNumPeople] = useState(1);
 	const [receiptUploading, setReceiptUploading] = useState(false);
 
@@ -46,7 +47,8 @@ const App = () => {
 			setToken(decodedToken);
 			setUser({ id: decodedToken["id"], username: decodedToken["username"] });
 		} else {
-			setUser(undefined);
+			setToken("");
+			setUser({});
 		}
 	}, []);
 
@@ -77,12 +79,9 @@ const App = () => {
 		addToken(token);
 
 		const decodedToken = jwt(res.data);
-		const decodedId = decodedToken.Id;
+		const decodedId = decodedToken.id;
 		const decodedUser = decodedToken.username;
 		const decodedEmail = decodedToken.email;
-
-		console.log("DECODED TOKEN: ", decodedToken);
-		console.log("You are logged in as: ", decodedUser);
 
 		setUser({ id: decodedId, username: decodedUser });
 		// store returned user somehow
@@ -91,7 +90,7 @@ const App = () => {
 	const logout = () => {
 		localStorage.removeItem("token");
 		setToken("");
-		setUser(undefined);
+		setUser({});
 	};
 
 	return (
@@ -131,7 +130,7 @@ const App = () => {
 					<Route
 						element={<Receipts token={token} user={user} />}
 						exact
-						path="receipts"
+						path={`receipts/:id`}
 					/>
 					<Route
 						element={<Receipt token={token} user={user} />}

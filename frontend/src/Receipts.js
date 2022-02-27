@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import axios from "axios";
 
@@ -9,13 +9,14 @@ const API_URL = "http://localhost:5000";
 
 const Receipts = ({ token, user }) => {
 	const [receipts, setReceipts] = useState([]);
+	const { id } = useParams();
 
 	useEffect(() => {
 		getReceipts();
 	}, []);
 
 	const getReceipts = async () => {
-		const response = await axios.get(`${API_URL}/receipts`);
+		const response = await axios.get(`${API_URL}/receipts/${id}`);
 		console.log("RECEIPTS: ", response);
 		setReceipts(response.data);
 	};
@@ -25,12 +26,12 @@ const Receipts = ({ token, user }) => {
 			return (
 				<tr className="receipt-row" key={idx}>
 					<td>
-						<Link className="receipt-link" to={`/receipt/${r.id}`}>
-							{r.vendor["name"]}
+						<Link className="receipt-link" to={`/receipt/${r.receipt_id}`}>
+							{r.vendor_name}
 						</Link>
 					</td>
-					<td>{r.date.slice(0, 10)}</td>
-					<td>${r.subtotal}</td>
+					<td>{r.transaction_date.slice(0, 10)}</td>
+					<td>${r.receipt_price}</td>
 					<td>{r.category}</td>
 				</tr>
 			);

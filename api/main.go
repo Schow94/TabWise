@@ -39,47 +39,59 @@ type Image struct {
 	FileData *multipart.FileHeader `form:"file"`
 }
 
+// Receipt struct used by FoundReceipt to construct final json sent back to user
 type Receipt struct {
-	ID               int
-	User_Id          int
-	Receipt_Price    float64
-	Num_People       int
-	Transaction_Date string
-	Category         string
-	Receipt_PPP      float64
-	Vendor_Name      string
-	Vendor_Address   string
-	Vendor_Phone     string
-	Vendor_URL       string
-	Vendor_Logo      string
-	Payment          string
+	ID               int     `json:"receipt_id"`
+	User_Id          int     `json:"user_id"`
+	Receipt_Price    float64 `json:"receipt_price"`
+	Num_People       int     `json:"num_people"`
+	Transaction_Date string  `json:"transaction_date"`
+	Category         string  `json:"category"`
+	Receipt_PPP      float64 `json:"receipt_ppp"`
+	Vendor_Name      string  `json:"vendor_name"`
+	Vendor_Address   string  `json:"vendor_address"`
+	Vendor_Phone     string  `json:"vendor_phone"`
+	Vendor_URL       string  `json:"vendor_url"`
+	Vendor_Logo      string  `json:"vendor_logo"`
+	Payment          string  `json:"payment"`
 }
 
+type Receipts []Receipt
+
+// Single Item
 type Item struct {
-	ID          int
-	Receipt_ID  int
-	Description string
-	Item_Price  float64
-	Quantity    float64
-	Item_PPP    float64
+	ID          int     `json:"item_id"`
+	Receipt_ID  int     `json:"receipt_id"`
+	Description string  `json:"description"`
+	Item_Price  float64 `json:"item_price"`
+	Quantity    float64 `json:"quantity"`
+	Item_PPP    float64 `json:"item_ppp"`
 }
 
+// Arr of Item structs
 type Items []Item
 
+// struct when Adding Receipt
 type AddReceipt struct {
-	User_Id          int
-	Receipt_Price    float64
-	Num_People       int
-	Transaction_Date string
-	Category         string
-	Receipt_PPP      float64
-	Vendor_Name      string
-	Vendor_Address   string
-	Vendor_Phone     string
-	Vendor_URL       string
-	Vendor_Logo      string
-	Payment          string
-	Line_Items       Items
+	User_Id          int     `json:"user_id"`
+	Receipt_Price    float64 `json:"receipt_price"`
+	Num_People       int     `json:"num_people"`
+	Transaction_Date string  `json:"transaction_date"`
+	Category         string  `json:"category"`
+	Receipt_PPP      float64 `json:"receipt_ppp"`
+	Vendor_Name      string  `json:"vendor_name"`
+	Vendor_Address   string  `json:"vendor_address"`
+	Vendor_Phone     string  `json:"vendor_phone"`
+	Vendor_URL       string  `json:"vendor_url"`
+	Vendor_Logo      string  `json:"vendor_logo"`
+	Payment          string  `json:"payment"`
+	Line_Items       Items   `json:"line_items"`
+}
+
+// struct we return to user for GET "/receipt/{id}"
+type FoundReceipt struct {
+	Receipt
+	Line_Items Items `json:"line_items"`
 }
 
 var db *sql.DB
@@ -312,12 +324,73 @@ func extractReceipt() map[string]interface{} {
 	return result
 }
 
-// Get Receipts
+// Get All Receipts for a user using /user_id url param
+// Wasn't able to send/receive Authorization Header containing token
 func GetReceipts(c *gin.Context) {
+	var receipts Receipts
+
 	fmt.Println("GET RECEIPTS ROUTE")
 
-	extractedData := findReceipts()
-	c.JSON(http.StatusOK, extractedData)
+	user_id := c.Param("id")
+	fmt.Println("URL PARAMS: ", user_id)
+
+	// Initialize Postgres db
+	db, err := gorm.Open(postgres.New(postgres.Config{
+		DSN:                  "user=stephenchow dbname=tabwise",
+		PreferSimpleProtocol: true, // disables implicit prepared statement usage
+	}), &gorm.Config{})
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Find receipt & line_items separately
+	// Not using a JOIN because of how I'm using data in Frontend already
+	// Frontend does not expect each item to have info about receipt
+	db.Find(&receipts, "user_id = ?", user_id)
+
+	l, _ := json.MarshalIndent(receipts, "", "\t")
+	fmt.Print("RECEIPTS: ", string(l))
+
+	// const BEARER_SCHEMA = "Bearer"
+	// authHeader := c.GetHeader("Authorization")
+	// tokenString := authHeader[len(BEARER_SCHEMA):]
+
+	// type claims struct {
+	// 	Id       uint64
+	// 	Username string
+	// 	Email    string
+	// }
+
+	// Parse the token
+	// token, err := jwt.ParseWithClaims(tokenString, &claims{}, func(token *jwt.Token) (interface{}, error) {
+	// 	// since we only use the one private key to sign the tokens,
+	// 	// we also only use its public counter part to verify
+	// 	return verifyKey, nil
+	// })
+
+	// claims := jwt.MapClaims{}
+	// token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+	// 	return []byte("<YOUR VERIFICATION KEY>"), nil
+	// })
+
+	// token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+	// 	if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+	// 		return nil, errors.New("unexpected signing method")
+	// 	}
+	// 	return []byte(os.Getenv("ACCESS_SECRET")), nil
+	// })
+
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+
+	// fmt.Println("TOKEN: ", token)
+	// Implement similar logic to getting a single receipt
+	// Use user_id to get receipts for only that user
+
+	// extractedData := findReceipts()
+	c.JSON(http.StatusOK, receipts)
 }
 
 // Find all receipts from "db"
@@ -345,17 +418,48 @@ func findReceipts() []map[string]interface{} {
 	return result
 }
 
-// Get Receipts
+// Get Receipt by receipt_id
 func GetReceipt(c *gin.Context) {
+	var receipt Receipt
+	var items Items
+
 	fmt.Println("GET A RECEIPT ROUTE")
 
-	id := c.Request.URL.Query()
-	// id := c.Param("id")
-	fmt.Println("URL PARAMS: ", id)
-	// Eventually will look for receipt in db using id from URL param
-	extractedData := extractReceipt()
-	c.JSON(http.StatusOK, extractedData)
+	receipt_id := c.Param("id")
+	fmt.Println("URL PARAMS: ", receipt_id)
 
+	// Initialize Postgres db
+	db, err := gorm.Open(postgres.New(postgres.Config{
+		DSN:                  "user=stephenchow dbname=tabwise",
+		PreferSimpleProtocol: true, // disables implicit prepared statement usage
+	}), &gorm.Config{})
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Find receipt & line_items separately
+	// Not using a JOIN because of how I'm using data in Frontend already
+	// Frontend does not expect each item to have info about receipt
+	db.Find(&receipt, receipt_id)
+	db.Find(&items, "receipt_id = ?", receipt_id)
+
+	// s, _ := json.MarshalIndent(receipt, "", "\t")
+	// fmt.Print("RECEIPT: ", string(s))
+
+	// f, _ := json.MarshalIndent(items, "", "\t")
+	// fmt.Print("ITEMS: ", string(f))
+
+	// Construct json object to send back to frontend
+	foundReceipt := &FoundReceipt{}
+	foundReceipt.Receipt = receipt
+	foundReceipt.Line_Items = items
+
+	l, _ := json.MarshalIndent(foundReceipt, "", "\t")
+	fmt.Print("ITEMS: ", string(l))
+
+	// extractedData := extractReceipt()
+	c.JSON(http.StatusOK, foundReceipt)
 }
 
 // Add Receipt to dbs
@@ -446,10 +550,19 @@ func main() {
 
 	router.Use(cors.Default())
 
+	// Had to enable Authorization header in CORS
+	// router.Use(cors.New(cors.Config{
+	// 	AllowOrigins:     []string{"http://localhost:3000"},
+	// 	AllowMethods:     []string{"GET", "POST", "DELETE", "PUT", "PATCH"},
+	// 	AllowHeaders:     []string{"Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"},
+	// 	ExposeHeaders:    []string{"Content-Length"},
+	// 	AllowCredentials: true,
+	// }))
+
 	router.POST("/login", Login)
 	router.POST("/signup", SignUp)
 	router.POST("/image", ImageUpload)
-	router.GET("/receipts", GetReceipts)
+	router.GET("/receipts/:id", GetReceipts)
 	router.POST("/receipts", saveReceipt)
 	router.GET("/receipt/:id", GetReceipt)
 

@@ -5,6 +5,7 @@ import Upload from "./Upload";
 import "./Landing.css";
 const Landing = ({
 	user,
+	token,
 	numPeople,
 	setNumPeople,
 	setReceipt,
@@ -15,7 +16,7 @@ const Landing = ({
 		<>
 			<div className="top-bg">
 				<div className="top-container">
-					{user ? (
+					{user && token ? (
 						<div className="upload-container">
 							<Upload
 								receiptUploading={receiptUploading}
