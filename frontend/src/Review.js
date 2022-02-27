@@ -7,21 +7,35 @@ import "./Review.css";
 
 const API_URL = "http://localhost:5000";
 
-const Review = ({ receipt, token, user }) => {
+const Review = ({ receipt, token, user, numPeople, setNumPeople }) => {
 	const renderItems = () => {
 		return receipt["line_items"].map((x, idx) => {
 			return <LineItem item={x} />;
 		});
 	};
 
-	const handleClick = async () => {
+	const saveReceipt = async () => {
 		console.log("RECEIPT: ", receipt);
 
 		// Save receipt to db
 		const res = await axios({
 			method: "POST",
 			url: `${API_URL}/receipts`,
-			data: receipt,
+			data: {
+				user_id: user.id,
+				num_people: receipt.num_people,
+				receipt_price: receipt.receipt_price,
+				receipt_ppp: receipt.receipt_ppp,
+				transaction_date: receipt.transaction_date,
+				category: receipt.category,
+				vendor_name: receipt.vendor_name,
+				vendor_address: receipt.vendor_address,
+				vendor_phone: receipt.vendor_phone,
+				vendor_url: receipt.vendor_url,
+				vendor_logo: receipt.vendor_logo,
+				payment: receipt.payment,
+				line_items: receipt.line_items,
+			},
 		});
 	};
 
@@ -37,19 +51,19 @@ const Review = ({ receipt, token, user }) => {
 										<div className="total-container">
 											<p>Total Price: </p>
 											<div className="total">
-												<p>${receipt["total"]}</p>
+												<p>${receipt["receipt_price"]}</p>
 											</div>
 										</div>
 
 										<div className="total-container">
 											<p>Number of people: </p>
 											<div className="total">
-												<p>5</p>
+												<p>{numPeople}</p>
 											</div>
 										</div>
 									</div>
 									<button
-										onClick={() => handleClick()}
+										onClick={() => saveReceipt()}
 										className="save-receipt-btn">
 										Save receipt
 									</button>

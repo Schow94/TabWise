@@ -5,6 +5,8 @@ import Upload from "./Upload";
 import "./Landing.css";
 const Landing = ({
 	user,
+	numPeople,
+	setNumPeople,
 	setReceipt,
 	receiptUploading,
 	setReceiptUploading,
@@ -19,6 +21,9 @@ const Landing = ({
 								receiptUploading={receiptUploading}
 								setReceiptUploading={setReceiptUploading}
 								setReceipt={setReceipt}
+								user={user}
+								numPeople={numPeople}
+								setNumPeople={setNumPeople}
 							/>
 						</div>
 					) : (

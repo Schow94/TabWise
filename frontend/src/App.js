@@ -17,8 +17,9 @@ const API_URL = "http://localhost:5000";
 
 const App = () => {
 	const [token, setToken] = useState({});
-	const [user, setUser] = useState("");
+	const [user, setUser] = useState({});
 	const [receipt, setReceipt] = useState({});
+	const [numPeople, setNumPeople] = useState(1);
 	const [receiptUploading, setReceiptUploading] = useState(false);
 
 	useEffect(() => {
@@ -43,7 +44,9 @@ const App = () => {
 			}
 
 			setToken(decodedToken);
-			setUser(decodedToken["username"]);
+			setUser({ id: decodedToken["id"], username: decodedToken["username"] });
+		} else {
+			setUser(undefined);
 		}
 	}, []);
 
@@ -80,13 +83,15 @@ const App = () => {
 
 		console.log("DECODED TOKEN: ", decodedToken);
 		console.log("You are logged in as: ", decodedUser);
-		setUser(decodedUser);
+
+		setUser({ id: decodedId, username: decodedUser });
 		// store returned user somehow
 	};
 
 	const logout = () => {
 		localStorage.removeItem("token");
 		setToken("");
+		setUser(undefined);
 	};
 
 	return (
@@ -102,6 +107,8 @@ const App = () => {
 								receiptUploading={receiptUploading}
 								setReceiptUploading={setReceiptUploading}
 								user={user}
+								numPeople={numPeople}
+								setNumPeople={setNumPeople}
 								token={token}
 							/>
 						}
@@ -109,7 +116,15 @@ const App = () => {
 						path="/"
 					/>
 					<Route
-						element={<Review token={token} user={user} receipt={receipt} />}
+						element={
+							<Review
+								numPeople={numPeople}
+								setNumPeople={setNumPeople}
+								token={token}
+								user={user}
+								receipt={receipt}
+							/>
+						}
 						exact
 						path="review"
 					/>

@@ -18,12 +18,14 @@ const Lineitem = ({ item }) => {
 	// It's only modifying the input's state
 	const [descriptionInput, handleDescriptionChange, resetDescription] =
 		useInputState(item.description);
-	const [totalInput, handleTotalChange, resetTotal] = useInputState(item.total);
+	const [totalInput, handleTotalChange, resetTotal] = useInputState(
+		item.item_price
+	);
 	const [quantityInput, handleQuantityChange, resetQuantity] = useInputState(
 		item.quantity
 	);
 	const [priceInput, handlePriceChange, resetPrice] = useInputState(
-		item.quantity
+		item.item_price
 	);
 
 	return (

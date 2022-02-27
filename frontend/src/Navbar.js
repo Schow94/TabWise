@@ -29,7 +29,8 @@ const Navbar = ({ user, logout }) => {
 				{user ? (
 					<>
 						<p className="logged-in">
-							Signed in as <div className="current-user-nav">{user}</div>
+							Signed in as{" "}
+							<div className="current-user-nav">{user.username}</div>
 						</p>
 						<button onClick={(e) => handleClick(e)}>Logout</button>
 					</>

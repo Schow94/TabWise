@@ -51,7 +51,8 @@ type Receipt struct {
 	Vendor_Address   string
 	Vendor_Phone     string
 	Vendor_URL       string
-	Payment          string
+	// Vendor_Logo      string
+	Payment string
 }
 
 type Item struct {
@@ -61,6 +62,23 @@ type Item struct {
 	Item_Price  float64
 	Quantity    float64
 	Item_PPP    float64
+}
+
+type Items []Item
+
+type AddReceipt struct {
+	User_Id          int
+	Receipt_Price    float64
+	Num_People       int
+	Transaction_Date string
+	Category         string `json:"category" binding:"required"`
+	Receipt_PPP      float64
+	Vendor_Name      string
+	Vendor_Address   string
+	Vendor_Phone     string
+	Vendor_URL       string
+	Payment          string
+	Line_Items       Items
 }
 
 var db *sql.DB
@@ -348,61 +366,75 @@ func GetReceipt(c *gin.Context) {
 
 // Add Receipt to dbs
 func saveReceipt(c *gin.Context) {
+	var incomingReceipt AddReceipt // u is json we receive from POST request
+
+	// s, _ := json.MarshalIndent(incomingReceipt, "", "\t")
+	// fmt.Print("INCOMING RECEIPT: ", string(s))
+
+	if err := c.BindJSON(&incomingReceipt); err != nil {
+		print("ERROR: ", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
 	// Initialize Postgres db
 	db, err := gorm.Open(postgres.New(postgres.Config{
 		DSN:                  "user=stephenchow dbname=tabwise",
 		PreferSimpleProtocol: true, // disables implicit prepared statement usage
 	}), &gorm.Config{})
+
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// data, _ := ioutil.ReadAll(c.Request.Body)
-	// fmt.Println("DATA: ", data)
 	// 1) Insert receipt in receipts table
 	//		- Wait for receipt_id
 
 	newReceipt := Receipt{
-		User_Id:          1,
-		Receipt_Price:    50,
-		Num_People:       1,
-		Transaction_Date: "2023-03-01",
-		Category:         "Leisure",
-		Receipt_PPP:      50,
-		Vendor_Name:      "Taco Bell",
-		Vendor_Address:   "12345 Street",
-		Vendor_Phone:     "(234)324-2348",
-		Vendor_URL:       "www.tacobell.com",
-		Payment:          "MC***1234",
+		User_Id:          incomingReceipt.User_Id,
+		Receipt_Price:    incomingReceipt.Receipt_Price,
+		Num_People:       incomingReceipt.Num_People,
+		Transaction_Date: incomingReceipt.Transaction_Date,
+		Category:         incomingReceipt.Category,
+		Receipt_PPP:      incomingReceipt.Receipt_PPP,
+		Vendor_Name:      incomingReceipt.Vendor_Name,
+		Vendor_Address:   incomingReceipt.Vendor_Address,
+		Vendor_Phone:     incomingReceipt.Vendor_Phone,
+		Vendor_URL:       incomingReceipt.Vendor_URL,
+		// Vendor_Logo:       incomingReceipt.Vendor_Logo,
+		Payment: incomingReceipt.Payment,
 	}
 
-	// Store new user's credentials in db (INSERT)
+	// f, _ := json.MarshalIndent(newReceipt, "", "\t")
+	// fmt.Print("NEW RECEIPT: ", string(f))
+
+	// Create new receipt in dB
 	addReceipt := db.Create(&newReceipt)
 
 	// 2) Once we have receipt_id, insert all items
-	//		- Each item gets it's own row
-	//		- Either loop through items and add individually or see if we can bulk add multiple rows
-
 	receipt_id := newReceipt.ID
-	fmt.Println("RECEIPT ID: ", receipt_id)
 
 	var AddReceiptErr = addReceipt.Error
 	if AddReceiptErr != nil {
 		fmt.Println("POSTGRES ERROR: ", AddReceiptErr)
 	}
 
-	items := []Item{
-		{
-			Receipt_ID:  receipt_id,
-			Description: "Very good pizza",
-			Item_Price:  240,
-			Quantity:    1,
-			Item_PPP:    240,
-		},
-	}
+	fmt.Println("Receipt added to dB")
+
+	// Save AddReceipt.LineItems to Items struct
+	items := incomingReceipt.Line_Items
+
+	// l, _ := json.MarshalIndent(items, "", "\t")
+	// fmt.Print("LINE ITEMS: ", string(l))
 
 	numItems := len(items)
+
+	// Change receipt_id for all items
+	for i := 0; i < numItems; i++ {
+		r_id := &items[i]
+		r_id.Receipt_ID = receipt_id
+	}
+
 	addItems := db.CreateInBatches(&items, numItems)
 
 	var AddItemsErr = addItems.Error
@@ -410,7 +442,7 @@ func saveReceipt(c *gin.Context) {
 		fmt.Println("POSTGRES ERROR: ", AddItemsErr)
 	}
 
-	fmt.Println("LINE ITEMS ADDED: ", addItems)
+	fmt.Println("Items added to dB")
 
 }
 
