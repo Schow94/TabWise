@@ -238,3 +238,14 @@ td {
 	cursor: pointer;
 	color: black;
 }
+
+.saved-status {
+	width: 150px;
+	height: 50px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 12px;
+	color: rgba(66, 188, 245, 0.8);
+	font-size: 25px;
+}

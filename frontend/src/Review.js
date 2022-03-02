@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
+import { AiOutlineCheck } from "react-icons/ai";
 
 import LineItem from "./LineItem";
 
@@ -8,11 +9,54 @@ import "./Review.css";
 const API_URL = "http://localhost:5000";
 
 const Review = ({ receipt, token, user, numPeople, setNumPeople }) => {
+	// Generic input hook
+	const useInputState = (initialVal) => {
+		const [val, setVal] = useState(initialVal);
+		const handleChange = (e) => {
+			setVal(e.target.value);
+			// console.log(e.target.name, ": ", val);
+		};
+		const reset = () => {
+			setVal("");
+		};
+		return [val, handleChange, reset];
+	};
+
+	const [participants, setParticipants] = useState([
+		{
+			name: "",
+			value: "",
+		},
+	]);
+
+	const changeParticipants = (e, val) => {
+		e.preventDefault();
+		if (val === "+") {
+			const recipients = [...participants, { name: "", value: "" }];
+			setParticipants(recipients);
+		} else if (val === "-") {
+			if (participants.length > 1) {
+				setParticipants(participants.slice(0, participants.length - 1));
+			}
+		}
+	};
+
+	// This is not actually modifying receipt state
+	// It's only modifying the input's state
+	const [descriptionInput, handleDescriptionChange, resetDescription] =
+		useInputState("");
+	const [totalInput, handleTotalChange, resetTotal] = useInputState("");
+	const [quantityInput, handleQuantityChange, resetQuantity] =
+		useInputState("");
+	const [priceInput, handlePriceChange, resetPrice] = useInputState("");
+
 	const renderItems = () => {
 		return receipt["line_items"].map((x, idx) => {
 			return <LineItem item={x} />;
 		});
 	};
+
+	const [saved, setSaved] = useState(false);
 
 	const saveReceipt = async () => {
 		console.log("RECEIPT: ", receipt);
@@ -37,6 +81,11 @@ const Review = ({ receipt, token, user, numPeople, setNumPeople }) => {
 				line_items: receipt.line_items,
 			},
 		});
+
+		// if (res) {
+		setSaved(true);
+		console.log("SAVED: ", saved);
+		// }
 	};
 
 	return (
@@ -62,10 +111,19 @@ const Review = ({ receipt, token, user, numPeople, setNumPeople }) => {
 											</div>
 										</div>
 									</div>
+
+									{saved ? (
+										<div className="saved-status">
+											<p>
+												Saved <AiOutlineCheck />
+											</p>
+										</div>
+									) : null}
+
 									<button
 										onClick={() => saveReceipt()}
 										className="save-receipt-btn">
-										Save receipt
+										{saved ? `Save again` : `Save receipt`}
 									</button>
 
 									{/* Option to save receipt data via post request */}
@@ -76,29 +134,40 @@ const Review = ({ receipt, token, user, numPeople, setNumPeople }) => {
 								<div className="email-container">
 									<h3>Send Email to Participants</h3>
 									<form>
-										<div className="email">
+										{participants.map((x) => {
+											return (
+												<div className="email">
+													<input
+														className="email-input"
+														placeholder="email"></input>
+													<input
+														className="email-input"
+														placeholder="name"></input>
+												</div>
+											);
+										})}
+
+										{/* <div className="email">
 											<input
 												className="email-input"
 												placeholder="email"></input>
 											<input className="email-input" placeholder="name"></input>
-										</div>
+										</div> */}
 
-										<div className="email">
-											<input
-												className="email-input"
-												placeholder="email"></input>
-											<input className="email-input" placeholder="name"></input>
-										</div>
-
-										<div>
-											<div>
-												<button className="recipient-btn">+</button>
-												<button className="recipient-btn">-</button>
-											</div>
-
-											<button className="send-email-btn">Send Email</button>
-										</div>
+										<button className="send-email-btn">Send Email</button>
 									</form>
+									<div>
+										<button
+											onClick={(e) => changeParticipants(e, "+")}
+											className="recipient-btn">
+											+
+										</button>
+										<button
+											onClick={(e) => changeParticipants(e, "-")}
+											className="recipient-btn">
+											-
+										</button>
+									</div>
 								</div>
 							</div>
 

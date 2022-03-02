@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import axios from "axios";
+import { BsTrash } from "react-icons/bs";
 
 import "./Receipts.css";
 
@@ -21,6 +22,18 @@ const Receipts = ({ token, user }) => {
 		setReceipts(response.data);
 	};
 
+	const onDelete = async (e, receipt_id) => {
+		e.preventDefault();
+		console.log("DELETING", receipt_id);
+		// const response = await axios.delete(`${API_URL}/receipts/${id}`);
+		// console.log("RECEIPTS: ", response);
+
+		// Use filter to remove receipt from state
+		const newReceipts = receipts.filter((x) => x.receipt_id !== receipt_id);
+		console.log("new receipts", newReceipts);
+		setReceipts(newReceipts);
+	};
+
 	const renderReceipts = () => {
 		return receipts.map((r, idx) => {
 			return (
@@ -33,6 +46,13 @@ const Receipts = ({ token, user }) => {
 					<td>{r.transaction_date.slice(0, 10)}</td>
 					<td>${r.receipt_price}</td>
 					<td>{r.category}</td>
+					<td>
+						<BsTrash
+							size={30}
+							className="trash-icon"
+							onClick={(e) => onDelete(e, r.receipt_id)}
+						/>
+					</td>
 				</tr>
 			);
 		});
@@ -50,6 +70,7 @@ const Receipts = ({ token, user }) => {
 								<th>Date</th>
 								<th>Price</th>
 								<th>Category</th>
+								<th></th>
 							</tr>
 						</thead>
 

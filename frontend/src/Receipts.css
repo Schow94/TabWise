@@ -50,3 +50,11 @@
 	color: rgb(0, 192, 134);
 	padding-top: 1em;
 }
+
+.trash-icon {
+	color: red;
+}
+
+.trash-icon:hover {
+	cursor: pointer;
+}
