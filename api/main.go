@@ -462,6 +462,31 @@ func GetReceipt(c *gin.Context) {
 	c.JSON(http.StatusOK, foundReceipt)
 }
 
+// DELETE Receipt by receipt_id
+func RemoveReceipt(c *gin.Context) {
+
+	fmt.Println("Delete A RECEIPT ROUTE")
+
+	receipt_id := c.Param("id")
+	fmt.Println("URL PARAMS: ", receipt_id)
+
+	// Initialize Postgres db
+	db, err := gorm.Open(postgres.New(postgres.Config{
+		DSN:                  "user=stephenchow dbname=tabwise",
+		PreferSimpleProtocol: true, // disables implicit prepared statement usage
+	}), &gorm.Config{})
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Delete Receipt by id
+	db.Delete(&Receipt{}, receipt_id)
+
+	// extractedData := extractReceipt()
+	c.JSON(200, gin.H{"message": "Successfully deleted receipt"})
+}
+
 // Add Receipt to dbs
 func saveReceipt(c *gin.Context) {
 	var incomingReceipt AddReceipt // u is json we receive from POST request
@@ -565,6 +590,7 @@ func main() {
 	router.GET("/receipts/:id", GetReceipts)
 	router.POST("/receipts", saveReceipt)
 	router.GET("/receipt/:id", GetReceipt)
+	router.DELETE("/receipt/:id", RemoveReceipt)
 
 	log.Fatal(router.Run(":8080"))
 }
