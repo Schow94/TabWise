@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { FiLogOut } from "react-icons/fi";
 
 import "./Navbar.css";
 
@@ -33,7 +34,9 @@ const Navbar = ({ user, logout, token }) => {
 							Signed in as
 							<span className="current-user-nav">{user.username}</span>
 						</p>
-						<button onClick={(e) => handleClick(e)}>Logout</button>
+						<button className="logout-btn" onClick={(e) => handleClick(e)}>
+							<FiLogOut /> Logout
+						</button>
 					</>
 				) : (
 					<>
