@@ -6,10 +6,18 @@ import LineItem from "./LineItem";
 
 import "./Review.css";
 
-const API_URL = "http://localhost:5000";
-const EMAIL_API_URL = "https://cryptic-basin-36672.herokuapp.com";
+const API_URL = process.env.REACT_APP_API_URL;
+const EMAIL_API_URL = process.env.REACT_APP_EMAIL_API_URL;
 
-const Review = ({ receipt, token, user, numPeople, setNumPeople }) => {
+const Review = ({
+	changeLineInput,
+	setReceipt,
+	receipt,
+	token,
+	user,
+	numPeople,
+	setNumPeople,
+}) => {
 	// Generic input hook
 	const useInputState = (initialVal) => {
 		const [val, setVal] = useState(initialVal);
@@ -22,32 +30,6 @@ const Review = ({ receipt, token, user, numPeople, setNumPeople }) => {
 		};
 		return [val, handleChange, reset];
 	};
-
-	// // Hook for each input
-	// const [usernameInput, handleUsernameChange, resetUsername] =
-	// 	useInputState("");
-
-	// const handleStudentInputChange = (i) => (e) => {
-	// 	const newStudentList = participants.map((x, idx) => {
-	// 		// console.log(x);
-	// 		// Is index passed up from onChange same as index of this student object?
-
-	// 		//if not the same index, return that student
-	// 		if (i !== idx) {
-	// 			return x;
-	// 		}
-	// 		// if student is the one we want to modify, we iterate thru all its properties
-	// 		// and modify {first, last, grade} and overwrite that students first,
-	// 		// last,grade properties
-	// 		return {
-	// 			...x,
-	// 			[e.target.name]: e.target.value,
-	// 		};
-	// 	});
-
-	// 	// add new/modified student to input student array/state
-	// 	setStudents(newStudentList);
-	// };
 
 	const [participants, setParticipants] = useState([
 		{ id: 1, name: "Bob", email: "bob@gmail.com" },
@@ -97,8 +79,8 @@ const Review = ({ receipt, token, user, numPeople, setNumPeople }) => {
 			method: "POST",
 			url: `${EMAIL_API_URL}/email`,
 			data: {
-				senderEmail: "*****@gmail.com",
-				password: "*****",
+				senderEmail: "***",
+				password: "**",
 				senderName: "Sel",
 				subject: "Long time no see!",
 				body: "It's been a while since you've heard from us. Don't worry, we didn't forget about you. There's so much we have to update you on. First of all, we're going out of business! So there's that....",
@@ -132,8 +114,17 @@ const Review = ({ receipt, token, user, numPeople, setNumPeople }) => {
 	const [priceInput, handlePriceChange, resetPrice] = useInputState("");
 
 	const renderItems = () => {
+		console.log(receipt);
 		return receipt["line_items"].map((x, idx) => {
-			return <LineItem item={x} />;
+			return (
+				<LineItem
+					changeLineInput={changeLineInput}
+					setReceipt={setReceipt}
+					receipt={receipt}
+					item={x}
+					id={idx}
+				/>
+			);
 		});
 	};
 

@@ -1,59 +1,46 @@
 import React, { useState } from "react";
 
-const Lineitem = ({ item }) => {
-	// Generic input hook
-	const useInputState = (initialVal) => {
-		const [val, setVal] = useState(initialVal);
-		const handleChange = (e) => {
-			setVal(e.target.value);
-			// console.log(e.target.name, ": ", val);
-		};
-		const reset = () => {
-			setVal("");
-		};
-		return [val, handleChange, reset];
-	};
-
-	// This is not actually modifying receipt state
-	// It's only modifying the input's state
-	const [descriptionInput, handleDescriptionChange, resetDescription] =
-		useInputState(item.description);
-	const [totalInput, handleTotalChange, resetTotal] = useInputState(
-		item.item_price
-	);
-	const [quantityInput, handleQuantityChange, resetQuantity] = useInputState(
-		item.quantity
-	);
-	const [priceInput, handlePriceChange, resetPrice] = useInputState(
-		item.item_price
-	);
+const Lineitem = ({ changeLineInput, setReceipt, receipt, item, id }) => {
+	console.log(item);
 
 	return (
-		<tr className="item" key={item.id}>
+		<tr className="item" key={id}>
 			<td className="name">
 				<input
+					id={id}
+					type="text"
+					name="description"
 					className="receipt-input"
-					onChange={handleDescriptionChange}
-					value={descriptionInput}></input>
+					onChange={changeLineInput(id)}
+					value={item.description}></input>
 			</td>
 			<td className="price">
 				$
 				<input
+					id={id}
+					type="text"
+					name="item_price"
 					className="receipt-input"
-					onChange={handleTotalChange}
-					value={totalInput}></input>
+					onChange={changeLineInput(id)}
+					value={item.item_price}></input>
 			</td>
 			<td className="quantity">
 				<input
+					id={id}
+					type="text"
+					name="quantity"
 					className="receipt-input"
-					onChange={handleQuantityChange}
-					value={quantityInput}></input>
+					onChange={changeLineInput(id)}
+					value={item.quantity}></input>
 			</td>
 			<td className="ppp">
 				<input
+					id={id}
+					type="text"
+					name="item_ppp"
 					className="receipt-input"
-					onChange={handlePriceChange}
-					value={priceInput}></input>
+					onChange={changeLineInput(id)}
+					value={item.item_ppp}></input>
 			</td>
 		</tr>
 	);

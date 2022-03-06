@@ -13,10 +13,10 @@ import Signup from "./Signup";
 import Receipts from "./Receipts";
 import Receipt from "./Receipt";
 
-const API_URL = "http://localhost:5000";
+const API_URL = process.env.REACT_APP_API_URL;
 
 const App = () => {
-	const [token, setToken] = useState({});
+	const [token, setToken] = useState("");
 	const [user, setUser] = useState({});
 	const [receipt, setReceipt] = useState({});
 	// const [receipts, setReceipts] = useState({});
@@ -24,31 +24,27 @@ const App = () => {
 	const [receiptUploading, setReceiptUploading] = useState(false);
 
 	useEffect(() => {
-		const token = localStorage.getItem("token");
-
-		if (token) {
-			let decodedToken = jwt(token);
+		const tokenLocalStorage = localStorage.getItem("token");
+		// If browser is reset add token in local storage to state
+		if (tokenLocalStorage) {
+			let decodedToken = jwt(tokenLocalStorage);
 			const expireDate = decodedToken.exp;
 			const currentTime = Date.now() / 1000;
 
-			//If token is expired, remove token from localstorage & set currentUser to ''
+			//If token is expired, remove token from localstorage & reset user & token state
 			if (expireDate < currentTime) {
-				console.log(
-					expireDate,
-					currentTime,
-					"Token is expired. Please login again for valid credentials"
-				);
 				//logout here
-				decodedToken = {};
 				localStorage.removeItem("token");
+				setUser({});
+				setToken("");
 				return;
 			}
-
-			setToken(decodedToken);
+			setToken(tokenLocalStorage);
 			setUser({ id: decodedToken["id"], username: decodedToken["username"] });
-		} else {
-			setToken("");
-			setUser({});
+		}
+		// No token in local storage
+		else {
+			logout();
 		}
 	}, []);
 
@@ -56,11 +52,6 @@ const App = () => {
 		setToken(token);
 		localStorage.setItem("token", token);
 	};
-
-	// const clearStorage = () => {
-	// 	localStorage.removeItem("token");
-	// 	setToken({});
-	// };
 
 	// Login
 	const login = async (e, usernameInput, passwordInput) => {
@@ -91,6 +82,32 @@ const App = () => {
 		localStorage.removeItem("token");
 		setToken("");
 		setUser({});
+		console.log("LOGGING OUT");
+	};
+
+	const changeLineInput = (id) => (e) => {
+		e.preventDefault();
+
+		const newItems = receipt.line_items.map((x, idx) => {
+			if (idx === id) {
+				console.log(id);
+				const newItem = {
+					...x,
+					[e.target.name]: e.target.value,
+				};
+
+				console.log("NEW ITEM: ", newItem);
+				return newItem;
+			} else {
+				return x;
+			}
+		});
+
+		const newReceipt = receipt;
+		newReceipt["line_items"] = newItems;
+		setReceipt(newReceipt);
+
+		console.log("MOST UPDATED RECEIPT: ", receipt);
 	};
 
 	return (
@@ -117,11 +134,13 @@ const App = () => {
 					<Route
 						element={
 							<Review
+								changeLineInput={changeLineInput}
 								numPeople={numPeople}
 								setNumPeople={setNumPeople}
 								token={token}
 								user={user}
 								receipt={receipt}
+								setReceipt={setReceipt}
 							/>
 						}
 						exact

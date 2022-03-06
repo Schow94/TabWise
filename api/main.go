@@ -350,10 +350,11 @@ func GetReceipts(c *gin.Context) {
 	db.Find(&receipts, "user_id = ?", user_id)
 
 	l, _ := json.MarshalIndent(receipts, "", "\t")
-	fmt.Print("RECEIPTS: ", string(l))
+	fmt.Println("RECEIPTS: ", string(l))
 
-	// const BEARER_SCHEMA = "Bearer"
-	// authHeader := c.GetHeader("Authorization")
+	// Get Authorization: `Bearer Token` from header
+	const BEARER_SCHEMA = "Bearer"
+	authHeader := c.Request.Header["Authorization"]
 	// tokenString := authHeader[len(BEARER_SCHEMA):]
 
 	// type claims struct {
@@ -385,7 +386,7 @@ func GetReceipts(c *gin.Context) {
 	// 	fmt.Println(err)
 	// }
 
-	// fmt.Println("TOKEN: ", token)
+	fmt.Println("TOKEN: ", authHeader)
 	// Implement similar logic to getting a single receipt
 	// Use user_id to get receipts for only that user
 
@@ -573,16 +574,16 @@ func saveReceipt(c *gin.Context) {
 func main() {
 	router := gin.Default()
 
-	router.Use(cors.Default())
+	// router.Use(cors.Default())
 
 	// Had to enable Authorization header in CORS
-	// router.Use(cors.New(cors.Config{
-	// 	AllowOrigins:     []string{"http://localhost:3000"},
-	// 	AllowMethods:     []string{"GET", "POST", "DELETE", "PUT", "PATCH"},
-	// 	AllowHeaders:     []string{"Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"},
-	// 	ExposeHeaders:    []string{"Content-Length"},
-	// 	AllowCredentials: true,
-	// }))
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowMethods:     []string{"GET", "POST", "DELETE", "PUT", "PATCH"},
+		AllowHeaders:     []string{"Access-Control-Allow-Headers, Authorization, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
 
 	router.POST("/login", Login)
 	router.POST("/signup", SignUp)

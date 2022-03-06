@@ -5,8 +5,6 @@ import ImageUploading from "react-images-uploading";
 
 import "./Upload.css";
 
-const API_URL = "http://localhost:5000";
-
 const Upload = ({
 	user,
 	numPeople,

@@ -19,7 +19,13 @@ const Receipt = ({ token, user }) => {
 	}, []);
 
 	const getReceipt = async (id) => {
-		const response = await axios.get(`${API_URL}/receipt/${id}`);
+		console.log("TOKEN: ", token);
+		const response = await axios({
+			method: "GET",
+			url: `${API_URL}/receipt/${id}`,
+			headers: { Authorization: `Bearer${token}` },
+		});
+
 		setReceipt(response.data);
 		// setPeople(receipt["num_people"]);
 	};
