@@ -19,7 +19,6 @@ const Upload = ({
 
 	const onChange = (imageList, addUpdateIndex) => {
 		// data for submit
-		console.log(imageList, addUpdateIndex);
 		setImages(imageList);
 	};
 
@@ -27,8 +26,6 @@ const Upload = ({
 		setReceiptUploading(true);
 		let formData = new FormData();
 		formData.append("receipt", images[0]["file"]);
-		// console.log("FORM DATA: ", formData);
-		// console.log("IMAGE: ", images[0]);
 
 		// OCR Microservice
 		const response = await axios({
@@ -60,8 +57,9 @@ const Upload = ({
 			vendor_url: data.vendor.web,
 			vendor_logo: data.vendor.vendor_logo,
 			payment: data.payment_display_name,
-			line_items: data.line_items.map((x) => {
+			line_items: data.line_items.map((x, idx) => {
 				return {
+					id: idx,
 					description: x.description,
 					item_price: x.total,
 					item_ppp: x.total / numPeople,

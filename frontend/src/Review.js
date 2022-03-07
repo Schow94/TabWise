@@ -8,6 +8,8 @@ import "./Review.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
 const EMAIL_API_URL = process.env.REACT_APP_EMAIL_API_URL;
+const REACT_APP_SENDER_EMAIL = process.env.REACT_APP_SENDER_EMAIL;
+const REACT_APP_SENDER_EMAIL_PW = process.env.REACT_APP_SENDER_EMAIL_PW;
 
 const Review = ({
 	changeLineInput,
@@ -18,19 +20,6 @@ const Review = ({
 	numPeople,
 	setNumPeople,
 }) => {
-	// Generic input hook
-	const useInputState = (initialVal) => {
-		const [val, setVal] = useState(initialVal);
-		const handleChange = (e) => {
-			setVal(e.target.value);
-			// console.log(e.target.name, ": ", val);
-		};
-		const reset = () => {
-			setVal("");
-		};
-		return [val, handleChange, reset];
-	};
-
 	const [participants, setParticipants] = useState([
 		{ id: 1, name: "Bob", email: "bob@gmail.com" },
 	]);
@@ -79,8 +68,8 @@ const Review = ({
 			method: "POST",
 			url: `${EMAIL_API_URL}/email`,
 			data: {
-				senderEmail: "***",
-				password: "**",
+				senderEmail: REACT_APP_SENDER_EMAIL,
+				password: REACT_APP_SENDER_EMAIL_PW,
 				senderName: "Sel",
 				subject: "Long time no see!",
 				body: "It's been a while since you've heard from us. Don't worry, we didn't forget about you. There's so much we have to update you on. First of all, we're going out of business! So there's that....",
@@ -101,20 +90,9 @@ const Review = ({
 		}
 
 		let res = await axios.all(promises);
-		console.log("RES: ", res);
 	};
 
-	// This is not actually modifying receipt state
-	// It's only modifying the input's state
-	const [descriptionInput, handleDescriptionChange, resetDescription] =
-		useInputState("");
-	const [totalInput, handleTotalChange, resetTotal] = useInputState("");
-	const [quantityInput, handleQuantityChange, resetQuantity] =
-		useInputState("");
-	const [priceInput, handlePriceChange, resetPrice] = useInputState("");
-
 	const renderItems = () => {
-		console.log(receipt);
 		return receipt["line_items"].map((x, idx) => {
 			return (
 				<LineItem
@@ -132,8 +110,6 @@ const Review = ({
 	const [emailSent, setEmailSent] = useState(false);
 
 	const saveReceipt = async () => {
-		console.log("RECEIPT: ", receipt);
-
 		// Save receipt to db
 		const res = await axios({
 			method: "POST",
@@ -157,7 +133,6 @@ const Review = ({
 
 		// if (res) {
 		setSaved(true);
-		console.log("SAVED: ", saved);
 		// }
 	};
 

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 
 const Lineitem = ({ changeLineInput, setReceipt, receipt, item, id }) => {
-	console.log(item);
-
 	return (
 		<tr className="item" key={id}>
 			<td className="name">

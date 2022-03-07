@@ -87,27 +87,21 @@ const App = () => {
 
 	const changeLineInput = (id) => (e) => {
 		e.preventDefault();
-
-		const newItems = receipt.line_items.map((x, idx) => {
-			if (idx === id) {
-				console.log(id);
-				const newItem = {
+		const copy = { ...receipt };
+		const newItems = copy.line_items.map((x) => {
+			if (x.id === id) {
+				return {
 					...x,
 					[e.target.name]: e.target.value,
 				};
-
-				console.log("NEW ITEM: ", newItem);
-				return newItem;
 			} else {
 				return x;
 			}
 		});
 
-		const newReceipt = receipt;
-		newReceipt["line_items"] = newItems;
-		setReceipt(newReceipt);
-
-		console.log("MOST UPDATED RECEIPT: ", receipt);
+		// const newReceipt = receipt;
+		copy["line_items"] = newItems;
+		setReceipt(copy);
 	};
 
 	return (

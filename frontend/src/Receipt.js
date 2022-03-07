@@ -19,7 +19,6 @@ const Receipt = ({ token, user }) => {
 	}, []);
 
 	const getReceipt = async (id) => {
-		console.log("TOKEN: ", token);
 		const response = await axios({
 			method: "GET",
 			url: `${API_URL}/receipt/${id}`,
@@ -31,7 +30,6 @@ const Receipt = ({ token, user }) => {
 	};
 
 	const renderItems = () => {
-		console.log("RECEIPT:", receipt);
 		return receipt["line_items"].map((r) => {
 			return (
 				<>

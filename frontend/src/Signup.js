@@ -52,9 +52,6 @@ const Signup = ({ addToken }) => {
 		const decodedId = decodedToken.Id;
 		const decodedUser = decodedToken.username;
 		const decodedEmail = decodedToken.email;
-
-		console.log("DECODED TOKEN: ", decodedToken);
-		console.log("You are logged in as: ", decodedUser);
 		// store returned user somehow
 
 		//Clear form - This doesn't work

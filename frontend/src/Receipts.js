@@ -26,13 +26,11 @@ const Receipts = ({ token, user }) => {
 	const onDelete = async (e, receipt_id) => {
 		e.preventDefault();
 		const response = await axios.delete(`${API_URL}/receipt/${receipt_id}`);
-		console.log("RESPONSE: ", response);
 
 		// Change this to only delete status 200
 		if (response) {
 			// Use filter to remove receipt from state
 			const newReceipts = receipts.filter((x) => x.receipt_id !== receipt_id);
-			console.log("new receipts", newReceipts);
 			setReceipts(newReceipts);
 		}
 	};

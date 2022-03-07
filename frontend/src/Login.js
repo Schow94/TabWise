@@ -11,7 +11,6 @@ const Login = ({ login }) => {
 		const [val, setVal] = useState(initialVal);
 		const handleChange = (e) => {
 			setVal(e.target.value);
-			// console.log(e.target.name, ": ", val);
 		};
 		const reset = () => {
 			setVal("");
