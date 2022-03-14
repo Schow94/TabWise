@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 
-const Lineitem = ({ changeLineInput, setReceipt, receipt, item, id }) => {
+const Lineitem = ({
+	changeLineInput,
+	setReceipt,
+	numPeople,
+	receipt,
+	item,
+	id,
+}) => {
 	return (
 		<tr className="item" key={id}>
 			<td className="name">
@@ -38,7 +45,7 @@ const Lineitem = ({ changeLineInput, setReceipt, receipt, item, id }) => {
 					name="item_ppp"
 					className="receipt-input"
 					onChange={changeLineInput(id)}
-					value={item.item_ppp}></input>
+					value={item.item_ppp / numPeople}></input>
 			</td>
 		</tr>
 	);

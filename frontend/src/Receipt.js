@@ -37,9 +37,7 @@ const Receipt = ({ token, user }) => {
 						<td>{r["description"]}</td>
 						<td>${r["item_price"]}</td>
 						<td>{r["quantity"]}</td>
-						<td>{`$${parseFloat(
-							r["item_price"] / receipt["num_people"]
-						).toFixed(2)}`}</td>
+						<td>{`$${parseFloat(r["item_ppp"]).toFixed(2)}`}</td>
 					</tr>
 					<hr />
 				</>

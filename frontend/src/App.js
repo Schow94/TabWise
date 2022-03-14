@@ -101,6 +101,7 @@ const App = () => {
 
 		// const newReceipt = receipt;
 		copy["line_items"] = newItems;
+		// console.log("Changed Receipt: ", copy);
 		setReceipt(copy);
 	};
 

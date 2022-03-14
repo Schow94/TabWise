@@ -101,6 +101,7 @@ const Review = ({
 					receipt={receipt}
 					item={x}
 					id={idx}
+					numPeople={numPeople}
 				/>
 			);
 		});
@@ -110,30 +111,66 @@ const Review = ({
 	const [emailSent, setEmailSent] = useState(false);
 
 	const saveReceipt = async () => {
+		const receiptData = {
+			user_id: user.id,
+			num_people: receipt.num_people,
+			receipt_price: receipt.receipt_price,
+			receipt_ppp: receipt.receipt_ppp,
+			transaction_date: receipt.transaction_date,
+			category: receipt.category,
+			vendor_name: receipt.vendor_name,
+			vendor_address: receipt.vendor_address,
+			vendor_phone: receipt.vendor_phone,
+			vendor_url: receipt.vendor_url,
+			vendor_logo: receipt.vendor_logo,
+			payment: receipt.payment,
+			line_items: receipt.line_items,
+		};
+
+		console.log(receiptData);
+
 		// Save receipt to db
 		const res = await axios({
 			method: "POST",
 			url: `${API_URL}/receipts`,
-			data: {
-				user_id: user.id,
-				num_people: receipt.num_people,
-				receipt_price: receipt.receipt_price,
-				receipt_ppp: receipt.receipt_ppp,
-				transaction_date: receipt.transaction_date,
-				category: receipt.category,
-				vendor_name: receipt.vendor_name,
-				vendor_address: receipt.vendor_address,
-				vendor_phone: receipt.vendor_phone,
-				vendor_url: receipt.vendor_url,
-				vendor_logo: receipt.vendor_logo,
-				payment: receipt.payment,
-				line_items: receipt.line_items,
-			},
+			data: receiptData,
 		});
 
 		// if (res) {
 		setSaved(true);
 		// }
+	};
+
+	// Generic input hook
+	const useInputState = (initialVal) => {
+		const [val, setVal] = useState(initialVal);
+		const handleChange = (e) => {
+			setVal(e.target.value);
+			// console.log(e.target.name, ": ", val);
+		};
+		const reset = () => {
+			setVal("");
+		};
+		return [val, handleChange, reset];
+	};
+
+	const changePeople = (e) => {
+		// Proceed only if input is a valid integer
+		// if (
+		// 	!Number.isInteger(parseInt(e.target.value)) ||
+		// 	parseInt(e.target.value) < 0
+		// )
+		// 	return;
+
+		setNumPeople(e.target.value);
+
+		const copy = { ...receipt };
+		copy["num_people"] = parseInt(e.target.value);
+		copy["line_items"].map(
+			(x) => (x["item_ppp"] = x["item_price"] / e.target.value)
+		);
+		console.log("COPY: ", copy);
+		setReceipt(copy);
 	};
 
 	return (
@@ -155,7 +192,14 @@ const Review = ({
 										<div className="total-container">
 											<p>Number of people: </p>
 											<div className="total">
-												<p>{numPeople}</p>
+												<input
+													type="text"
+													className="total"
+													name="numPeople"
+													value={numPeople}
+													placeholder="# of people"
+													onChange={changePeople}
+												/>
 											</div>
 										</div>
 									</div>
