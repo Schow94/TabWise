@@ -24,7 +24,7 @@ const Review = ({
 	let navigate = useNavigate();
 
 	const [participants, setParticipants] = useState([
-		{ id: 1, name: "Bob", email: "bob@gmail.com" },
+		{ id: 1, name: "", email: "" },
 	]);
 
 	const [saved, setSaved] = useState(false);
@@ -37,8 +37,8 @@ const Review = ({
 			const recipients = [
 				...participants,
 				{
-					name: "Stephen",
-					email: "stephen@gmail.com",
+					name: "",
+					email: "",
 					id: participants.length + 1,
 				},
 			];
@@ -97,6 +97,7 @@ const Review = ({
 		}
 
 		let res = await axios.all(promises);
+		setParticipants([{ id: 1, name: "", email: "" }]);
 	};
 
 	const renderItems = () => {
@@ -199,16 +200,14 @@ const Review = ({
 
 										<div className="total-container">
 											<p>Number of people: </p>
-											<div className="total">
-												<input
-													type="text"
-													className="total"
-													name="numPeople"
-													value={numPeople}
-													placeholder="# of people"
-													onChange={changePeople}
-												/>
-											</div>
+											<input
+												type="text"
+												className="total-input"
+												name="numPeople"
+												value={numPeople}
+												placeholder="# of people"
+												onChange={changePeople}
+											/>
 										</div>
 									</div>
 
@@ -220,17 +219,19 @@ const Review = ({
 										</div>
 									) : null}
 
-									<button
-										onClick={() => saveReceipt()}
-										className="save-receipt-btn">
-										{saved ? `Save again` : `Save receipt`}
-									</button>
-
-									{saved ? (
-										<button onClick={() => done()} className="done-btn">
-											Done
+									<div className="receipt-btns-container">
+										<button
+											onClick={() => saveReceipt()}
+											className="save-receipt-btn">
+											{saved ? `Save again` : `Save receipt`}
 										</button>
-									) : null}
+
+										{saved ? (
+											<button onClick={() => done()} className="done-btn">
+												Done
+											</button>
+										) : null}
+									</div>
 								</div>
 
 								{saved ? (
@@ -246,7 +247,7 @@ const Review = ({
 															className="email-input"
 															name="name"
 															value={x.name}
-															placeholder="name"
+															placeholder="Name"
 															onChange={changeParticipantInput(x.id)}
 														/>
 														<input
@@ -255,31 +256,33 @@ const Review = ({
 															className="email-input"
 															name="email"
 															value={x.email}
-															placeholder="email"
+															placeholder="Email"
 															onChange={changeParticipantInput(x.id)}
 														/>
 													</div>
 												);
 											})}
 
-											<button
-												onClick={(e) => loopParticipants(e)}
-												className="send-email-btn">
-												Send Email
-											</button>
+											<div className="email-btns">
+												<button
+													onClick={(e) => loopParticipants(e)}
+													className="send-email-btn">
+													Send Email
+												</button>
+
+												<button
+													onClick={(e) => changeNumParticipants(e, "+")}
+													className="recipient-btn">
+													+
+												</button>
+
+												<button
+													onClick={(e) => changeNumParticipants(e, "-")}
+													className="recipient-btn">
+													-
+												</button>
+											</div>
 										</form>
-										<div>
-											<button
-												onClick={(e) => changeNumParticipants(e, "+")}
-												className="recipient-btn">
-												+
-											</button>
-											<button
-												onClick={(e) => changeNumParticipants(e, "-")}
-												className="recipient-btn">
-												-
-											</button>
-										</div>
 									</div>
 								) : null}
 							</div>

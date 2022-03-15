@@ -69,7 +69,7 @@ const Receipts = ({ token, user }) => {
 							<tr className="receipt-row">
 								<th>Vendor</th>
 								<th>Date</th>
-								<th>Price</th>
+								<th>Total</th>
 								<th>Category</th>
 								<th></th>
 							</tr>

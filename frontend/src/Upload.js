@@ -110,8 +110,16 @@ const Upload = ({
 								className="receipt-image"
 							/>
 							<div className="image-item__btn-wrapper">
-								<button onClick={() => onImageUpdate(index)}>Update</button>
-								<button onClick={() => onImageRemove(index)}>Remove</button>
+								<button
+									className="update-btn"
+									onClick={() => onImageUpdate(index)}>
+									Update
+								</button>
+								<button
+									className="remove-btn"
+									onClick={() => onImageRemove(index)}>
+									Remove
+								</button>
 							</div>
 						</div>
 					))}

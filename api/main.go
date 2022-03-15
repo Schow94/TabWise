@@ -347,7 +347,7 @@ func GetReceipts(c *gin.Context) {
 	// Find receipt & line_items separately
 	// Not using a JOIN because of how I'm using data in Frontend already
 	// Frontend does not expect each item to have info about receipt
-	db.Find(&receipts, "user_id = ?", user_id)
+	db.Order("created_at desc").Find(&receipts, "user_id = ?", user_id)
 
 	l, _ := json.MarshalIndent(receipts, "", "\t")
 	fmt.Println("RECEIPTS: ", string(l))
@@ -392,31 +392,6 @@ func GetReceipts(c *gin.Context) {
 
 	// extractedData := findReceipts()
 	c.JSON(http.StatusOK, receipts)
-}
-
-// Find all receipts from "db"
-func findReceipts() []map[string]interface{} {
-	fmt.Println("Finding receipts!!!")
-	jsonFile, err := os.Open("receipts.json")
-	// if we os.Open returns an error then handle it
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	fmt.Println("Opening receipts.json")
-
-	defer jsonFile.Close()
-
-	byteValue, _ := ioutil.ReadAll(jsonFile)
-
-	fmt.Println("Reading results.json")
-
-	// Save receipts.json to arr of JSON
-	var result []map[string]interface{}
-	json.Unmarshal([]byte(byteValue), &result)
-
-	// defer the closing of our jsonFile so that we can parse it later on
-	return result
 }
 
 // Get Receipt by receipt_id

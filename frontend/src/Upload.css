@@ -45,3 +45,45 @@
 	width: 400px;
 	border-radius: 10px;
 }
+
+.update-btn {
+	width: 150px;
+	height: 50px;
+	border-radius: 10px;
+	border: none;
+	background-color: rgb(79, 199, 255);
+	color: white;
+	font-size: 16px;
+	letter-spacing: 1px;
+}
+
+.update-btn:hover {
+	cursor: pointer;
+	background-color: rgb(23, 101, 138);
+	color: black;
+}
+
+.remove-btn {
+	width: 150px;
+	height: 50px;
+	border-radius: 10px;
+	border: none;
+	color: white;
+	background-color: rgb(255, 29, 29);
+	font-size: 16px;
+	letter-spacing: 1px;
+}
+
+.remove-btn:hover {
+	cursor: pointer;
+	background-color: rgb(172, 36, 36);
+
+	color: black;
+}
+
+.image-item__btn-wrapper {
+	margin-top: 1em;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+}
