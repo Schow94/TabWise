@@ -568,6 +568,8 @@ func saveReceipt(c *gin.Context) {
 
 	fmt.Println("Items added to dB")
 
+	c.JSON(200, gin.H{"receipt_id": receipt_id, "message": "Successfully saved receipt"})
+
 }
 
 // -------------------------- MAIN  --------------------------

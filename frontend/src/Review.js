@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AiOutlineCheck } from "react-icons/ai";
 
@@ -20,9 +21,15 @@ const Review = ({
 	numPeople,
 	setNumPeople,
 }) => {
+	let navigate = useNavigate();
+
 	const [participants, setParticipants] = useState([
 		{ id: 1, name: "Bob", email: "bob@gmail.com" },
 	]);
+
+	const [saved, setSaved] = useState(false);
+	const [emailSent, setEmailSent] = useState(false);
+	const [savedReceiptId, setSavedReceiptId] = useState(undefined);
 
 	const changeNumParticipants = (e, val) => {
 		e.preventDefault();
@@ -72,7 +79,7 @@ const Review = ({
 				password: REACT_APP_SENDER_EMAIL_PW,
 				senderName: "Sel",
 				subject: "Long time no see!",
-				body: "It's been a while since you've heard from us. Don't worry, we didn't forget about you. There's so much we have to update you on. First of all, we're going out of business! So there's that....",
+				body: `Hi ${name}, your portion of the bill is $${receipt.receipt_ppp}. You can find the entire tab breakdown here: http://localhost:3000/receipt/${savedReceiptId}`,
 				htmlTemplate: "<h1>{{.PageTitle}}</h1>",
 				recipients: [{ name: name, email: email }],
 			},
@@ -107,15 +114,12 @@ const Review = ({
 		});
 	};
 
-	const [saved, setSaved] = useState(false);
-	const [emailSent, setEmailSent] = useState(false);
-
 	const saveReceipt = async () => {
 		const receiptData = {
 			user_id: user.id,
 			num_people: receipt.num_people,
 			receipt_price: receipt.receipt_price,
-			receipt_ppp: receipt.receipt_ppp,
+			receipt_ppp: receipt.receipt_price / receipt.num_people,
 			transaction_date: receipt.transaction_date,
 			category: receipt.category,
 			vendor_name: receipt.vendor_name,
@@ -127,14 +131,14 @@ const Review = ({
 			line_items: receipt.line_items,
 		};
 
-		console.log(receiptData);
-
 		// Save receipt to db
 		const res = await axios({
 			method: "POST",
 			url: `${API_URL}/receipts`,
 			data: receiptData,
 		});
+
+		setSavedReceiptId(res.data["receipt_id"]);
 
 		// if (res) {
 		setSaved(true);
@@ -166,11 +170,15 @@ const Review = ({
 
 		const copy = { ...receipt };
 		copy["num_people"] = parseInt(e.target.value);
+		copy["receipt_ppp"] = copy["receipt_price"] / parseInt(e.target.value);
 		copy["line_items"].map(
 			(x) => (x["item_ppp"] = x["item_price"] / e.target.value)
 		);
-		console.log("COPY: ", copy);
 		setReceipt(copy);
+	};
+
+	const done = () => {
+		navigate(`/receipts/${user.id}`);
 	};
 
 	return (
@@ -218,65 +226,62 @@ const Review = ({
 										{saved ? `Save again` : `Save receipt`}
 									</button>
 
-									{/* Option to save receipt data via post request */}
-									{/* Receipt has a date, user_id, receipt_id, # ppl, price/person, total_price*/}
-									{/* Each receipt item can be related to a receipt_id */}
+									{saved ? (
+										<button onClick={() => done()} className="done-btn">
+											Done
+										</button>
+									) : null}
 								</div>
 
-								<div className="email-container">
-									<h3>Send Email to Participants</h3>
-									<form>
-										{participants.map((x) => {
-											return (
-												<div className="participant" key={x.id}>
-													<input
-														type="text"
-														id={x.id}
-														className="email-input"
-														name="name"
-														value={x.name}
-														placeholder="name"
-														onChange={changeParticipantInput(x.id)}
-													/>
-													<input
-														type="text"
-														id={x.id}
-														className="email-input"
-														name="email"
-														value={x.email}
-														placeholder="email"
-														onChange={changeParticipantInput(x.id)}
-													/>
-												</div>
-											);
-										})}
+								{saved ? (
+									<div className="email-container">
+										<h3>Send Email to Participants</h3>
+										<form>
+											{participants.map((x) => {
+												return (
+													<div className="participant" key={x.id}>
+														<input
+															type="text"
+															id={x.id}
+															className="email-input"
+															name="name"
+															value={x.name}
+															placeholder="name"
+															onChange={changeParticipantInput(x.id)}
+														/>
+														<input
+															type="text"
+															id={x.id}
+															className="email-input"
+															name="email"
+															value={x.email}
+															placeholder="email"
+															onChange={changeParticipantInput(x.id)}
+														/>
+													</div>
+												);
+											})}
 
-										{/* <div className="email">
-											<input
-												className="email-input"
-												placeholder="email"></input>
-											<input className="email-input" placeholder="name"></input>
-										</div> */}
-
-										<button
-											onClick={(e) => loopParticipants(e)}
-											className="send-email-btn">
-											Send Email
-										</button>
-									</form>
-									<div>
-										<button
-											onClick={(e) => changeNumParticipants(e, "+")}
-											className="recipient-btn">
-											+
-										</button>
-										<button
-											onClick={(e) => changeNumParticipants(e, "-")}
-											className="recipient-btn">
-											-
-										</button>
+											<button
+												onClick={(e) => loopParticipants(e)}
+												className="send-email-btn">
+												Send Email
+											</button>
+										</form>
+										<div>
+											<button
+												onClick={(e) => changeNumParticipants(e, "+")}
+												className="recipient-btn">
+												+
+											</button>
+											<button
+												onClick={(e) => changeNumParticipants(e, "-")}
+												className="recipient-btn">
+												-
+											</button>
+										</div>
 									</div>
-								</div>
+								) : null}
 							</div>
 
 							<table className="items">

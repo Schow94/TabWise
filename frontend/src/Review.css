@@ -171,6 +171,23 @@ td {
 	letter-spacing: 1px;
 }
 
+.done-btn {
+	width: 150px;
+	height: 50px;
+	border-radius: 10px;
+	border: none;
+	background-color: rgb(255, 96, 242);
+	color: white;
+	font-size: 16px;
+	letter-spacing: 1px;
+}
+
+.done-btn:hover {
+	cursor: pointer;
+	background-color: rgb(255, 29, 236);
+	color: black;
+}
+
 .participant {
 	margin-bottom: 1em;
 }
