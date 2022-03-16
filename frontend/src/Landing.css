@@ -13,6 +13,29 @@
 	height: 100%;
 }
 
+.instructions-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: start;
+	width: 100%;
+}
+
+.instructions-image {
+	width: 60%;
+}
+
+.instructions {
+	width: 35%;
+	margin-top: 3em;
+	color: rgb(77, 72, 72);
+}
+
+.instructions p {
+	font-size: 18px;
+	letter-spacing: 0.5px;
+}
+
 .testimonial-text {
 	/* background-color: red; */
 	/* transform: translate(0%, -50%); */
@@ -88,4 +111,9 @@
 .upload-container {
 	width: 100%;
 	/* height: 50%; */
+}
+
+.instructions-title {
+	text-align: center;
+	color: rgb(247, 125, 11);
 }
