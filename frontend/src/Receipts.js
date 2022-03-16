@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 import axios from "axios";
 import { BsTrash } from "react-icons/bs";
+import Pagination from "./Pagination";
 
 import "./Receipts.css";
 
@@ -12,6 +15,8 @@ const EMAIL_API_URL = process.env.REACT_APP_EMAIL_API_URL;
 const Receipts = ({ token, user }) => {
 	const [receipts, setReceipts] = useState([]);
 	const { id } = useParams();
+	const [currentPage, setCurrentPage] = useState(1);
+	const [postsPerPage] = useState(7);
 
 	useEffect(() => {
 		getReceipts();
@@ -23,8 +28,9 @@ const Receipts = ({ token, user }) => {
 		setReceipts(response.data);
 	};
 
-	const onDelete = async (e, receipt_id) => {
-		e.preventDefault();
+	const onDelete = async (receipt_id) => {
+		console.log(receipt_id);
+
 		const response = await axios.delete(`${API_URL}/receipt/${receipt_id}`);
 
 		// Change this to only delete status 200
@@ -35,8 +41,27 @@ const Receipts = ({ token, user }) => {
 		}
 	};
 
+	const submit = (e, receipt_id) => {
+		e.preventDefault();
+
+		console.log(receipt_id);
+		confirmAlert({
+			title: "Confirm to submit",
+			message: "Are you sure to do this.",
+			buttons: [
+				{
+					label: "Yes",
+					onClick: () => onDelete(receipt_id),
+				},
+				{
+					label: "No",
+				},
+			],
+		});
+	};
+
 	const renderReceipts = () => {
-		return receipts.map((r, idx) => {
+		return currentReceipts.map((r, idx) => {
 			return (
 				<tr className="receipt-row" key={idx}>
 					<td>
@@ -51,13 +76,21 @@ const Receipts = ({ token, user }) => {
 						<BsTrash
 							size={30}
 							className="trash-icon"
-							onClick={(e) => onDelete(e, r.receipt_id)}
+							onClick={(e) => submit(e, r.receipt_id)}
+							// onClick={submit}
 						/>
 					</td>
 				</tr>
 			);
 		});
 	};
+
+	// Pagination
+	const indexOfLastPost = currentPage * postsPerPage; // Page 1 * 10 posts per page --> indexOfLastPost is 10
+	const indexOfFirstPost = indexOfLastPost - postsPerPage; // For Page 1 --> 10 - 10 = 0 --> indexOfFirstPost is 0
+	const currentReceipts = receipts.slice(indexOfFirstPost, indexOfLastPost); // slice(0,10)
+
+	const paginate = (num) => setCurrentPage(num);
 
 	return (
 		<div className="bg-body">
@@ -77,6 +110,13 @@ const Receipts = ({ token, user }) => {
 
 						<tbody>{renderReceipts()}</tbody>
 					</table>
+
+					<Pagination
+						postsPerPage={postsPerPage}
+						totalPosts={receipts.length}
+						paginate={paginate}
+						currentPage={currentPage}
+					/>
 				</div>
 			) : (
 				<div className="no-receipt">
