@@ -69,17 +69,29 @@ const Landing = ({
 								src="./stefania.jpeg"
 								alt="stefania"
 							/>
-							{/* <p className="testimonial-text">
-							Stefania has improved her social life using TabWise
-						</p> */}
+
+							<div className="testimonial-box">
+								<p className="testimonial-text">
+									Stefania has improved her social life using TabWise
+								</p>
+							</div>
 						</div>
-						<div className="testimonal-container">
+						<div className="testimonial-container">
 							<img className="testimonial-img" src="./anne.jpeg" alt="anne" />
-							{/* <p className="testimonial-text">
-							Anne has a fast-paced life that doesn't allow her to dwell over
-							the boring things in life
-						</p> */}
+
+							<div className="testimonial-box">
+								<p className="testimonial-text">
+									Anne has a fast-paced life that doesn't allow her to dwell
+									over the boring things in life
+								</p>
+							</div>
 						</div>
+
+						{/* <div className="testimonal-container">
+
+							<div className="testimonial-box">
+							</div>
+						</div> */}
 					</div>
 				)}
 			</div>
