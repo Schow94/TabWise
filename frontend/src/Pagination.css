@@ -40,6 +40,7 @@
 	background-color: #4caf50;
 	color: white;
 	border: 1px solid #4caf50;
+	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 .page-item:hover {

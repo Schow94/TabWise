@@ -19,7 +19,9 @@ const Receipts = ({ token, user }) => {
 	const [postsPerPage] = useState(7);
 
 	useEffect(() => {
-		getReceipts();
+		if (user.id && token) {
+			getReceipts();
+		}
 	}, []);
 
 	const getReceipts = async () => {
@@ -115,6 +117,7 @@ const Receipts = ({ token, user }) => {
 						postsPerPage={postsPerPage}
 						totalPosts={receipts.length}
 						paginate={paginate}
+						user={user}
 						currentPage={currentPage}
 					/>
 				</div>

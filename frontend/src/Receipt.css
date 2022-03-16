@@ -46,6 +46,7 @@
 
 .receipt-table {
 	background-color: rgba(228, 228, 228, 0.3);
+	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 	border-radius: 1em;
 	width: 80%;
 	height: 100%;
@@ -53,7 +54,7 @@
 }
 
 .receipt-summary {
-	background-color: rgba(228, 228, 228, 0.3);
+	/* background-color: rgba(228, 228, 228, 0.3); */
 	width: 80%;
 	margin-top: 2%;
 	margin-bottom: 2%;
@@ -81,10 +82,13 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	width: 25%;
+	width: 35%;
 	justify-content: space-between;
-	background-color: rgba(111, 255, 212, 0.479);
+	/* background-color: rgba(111, 255, 212, 0.479); */
+	background-color: rgba(204, 255, 240, 0.479);
+	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 	border-radius: 1em;
+	font-size: 18px;
 }
 
 .vendor-title {
@@ -96,7 +100,9 @@
 }
 
 .transaction-summary {
-	background-color: rgba(111, 255, 212, 0.479);
+	background-color: rgba(204, 255, 240, 0.479);
+	/* background-color: rgba(167, 233, 245, 0.3); */
+	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 	height: 100%;
 	border-radius: 1em;
 	width: 25%;
@@ -106,4 +112,5 @@
 	flex-direction: column;
 	justify-content: center;
 	padding-left: 5%;
+	font-size: 18px;
 }

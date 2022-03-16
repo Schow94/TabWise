@@ -26,7 +26,6 @@ const Receipt = ({ token, user }) => {
 		});
 
 		setReceipt(response.data);
-		// setPeople(receipt["num_people"]);
 	};
 
 	const renderItems = () => {

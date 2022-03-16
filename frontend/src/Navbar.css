@@ -58,6 +58,7 @@ ul {
 
 .logout-btn {
 	background-color: rgb(255, 129, 129);
+	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 	color: black;
 	font-size: 16px;
 	border: none;

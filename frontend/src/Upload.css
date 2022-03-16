@@ -5,6 +5,7 @@
 	border-radius: 10px;
 	font-size: 16px;
 	background-color: rgb(18, 143, 216);
+	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 	color: white;
 }
 
@@ -20,6 +21,7 @@
 	border-radius: 10px;
 	font-size: 16px;
 	background-color: rgb(209, 18, 216);
+	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 	color: black;
 	margin: 1em;
 }
@@ -32,6 +34,7 @@
 
 .upload-body {
 	background-color: rgba(230, 230, 230, 0.8);
+	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 	border-radius: 1em;
 	width: 100%;
 	display: flex;
@@ -43,6 +46,7 @@
 
 .receipt-image {
 	width: 400px;
+	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 	border-radius: 10px;
 }
 
@@ -52,6 +56,7 @@
 	border-radius: 10px;
 	border: none;
 	background-color: rgb(79, 199, 255);
+	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 	color: white;
 	font-size: 16px;
 	letter-spacing: 1px;
@@ -70,6 +75,7 @@
 	border: none;
 	color: white;
 	background-color: rgb(255, 29, 29);
+	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 	font-size: 16px;
 	letter-spacing: 1px;
 }
