@@ -23,7 +23,7 @@
 	background-color: rgb(209, 18, 216);
 	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 	color: black;
-	margin: 1em;
+	margin-left: 1em;
 }
 
 .analyze-btn:hover {
@@ -38,9 +38,10 @@
 	border-radius: 1em;
 	width: 100%;
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	margin-top: 50%;
+	margin-top: 80%;
 	padding: 1em;
 }
 
@@ -60,6 +61,7 @@
 	color: white;
 	font-size: 16px;
 	letter-spacing: 1px;
+	margin-left: 1em;
 }
 
 .update-btn:hover {
@@ -78,6 +80,7 @@
 	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 	font-size: 16px;
 	letter-spacing: 1px;
+	margin-left: 1em;
 }
 
 .remove-btn:hover {
@@ -92,4 +95,32 @@
 	display: flex;
 	flex-direction: row;
 	justify-content: space-around;
+	align-items: center;
+	width: 100%;
+}
+
+.loader-container {
+	color: #f056e8;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.loader {
+	border: 16px solid #f3f3f3; /* Light grey */
+	border-top: 16px solid #f056e8; /* Blue */
+	border-radius: 50%;
+	width: 120px;
+	height: 120px;
+	animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
 }

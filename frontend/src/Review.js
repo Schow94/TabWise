@@ -79,7 +79,7 @@ const Review = ({
 				password: REACT_APP_SENDER_EMAIL_PW,
 				senderName: "Sel",
 				subject: "Long time no see!",
-				body: `Hi ${name}, your portion of the bill is $${receipt.receipt_ppp}. You can find the entire tab breakdown here: http://localhost:3000/receipt/${savedReceiptId}`,
+				body: `Your portion of the bill is $${receipt.receipt_ppp}. You can find the entire tab breakdown here: http://localhost:3000/receipt/${savedReceiptId}`,
 				htmlTemplate: "<h1>{{.PageTitle}}</h1>",
 				recipients: [{ name: name, email: email }],
 			},
@@ -192,14 +192,21 @@ const Review = ({
 								<div className="summary-container">
 									<div className="summary">
 										<div className="total-container">
-											<p>Total Price: </p>
+											<p>Total: </p>
 											<div className="total">
 												<p>${receipt["receipt_price"]}</p>
 											</div>
 										</div>
 
 										<div className="total-container">
-											<p>Number of people: </p>
+											<p>Per person: </p>
+											<div className="total">
+												<p>${receipt["receipt_price"] / numPeople}</p>
+											</div>
+										</div>
+
+										<div className="total-container">
+											<p>People: </p>
 											<input
 												type="text"
 												className="total-input"

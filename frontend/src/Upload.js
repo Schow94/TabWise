@@ -14,7 +14,7 @@ const Upload = ({
 	setReceiptUploading,
 }) => {
 	let navigate = useNavigate();
-	const [images, setImages] = React.useState([]);
+	const [images, setImages] = useState([]);
 	const maxNumber = 1;
 
 	const onChange = (imageList, addUpdateIndex) => {
@@ -102,34 +102,43 @@ const Upload = ({
 						</button>
 					)}
 					&nbsp;
-					{imageList.map((image, index) => (
-						<div key={index} className="image-item">
-							<img
-								src={image["data_url"]}
-								alt="receipt"
-								className="receipt-image"
-							/>
-							<div className="image-item__btn-wrapper">
-								<button
-									className="update-btn"
-									onClick={() => onImageUpdate(index)}>
-									Update
-								</button>
-								<button
-									className="remove-btn"
-									onClick={() => onImageRemove(index)}>
-									Remove
-								</button>
-							</div>
+					{receiptUploading ? (
+						<div className="loader-container">
+							<h1>Extracting Data</h1>
+							<div class="loader"></div>
 						</div>
-					))}
-					{imageList.length > 0 ? (
-						<button
-							className="analyze-btn"
-							onClick={() => onSubmit(onImageRemove)}>
-							{receiptUploading ? `Uploading...` : `Analyze Receipt`}
-						</button>
-					) : null}
+					) : (
+						imageList.map((image, index) => (
+							<div key={index} className="image-item">
+								<img
+									src={image["data_url"]}
+									alt="receipt"
+									className="receipt-image"
+								/>
+								<div className="image-item__btn-wrapper">
+									<button
+										className="update-btn"
+										onClick={() => onImageUpdate(index)}>
+										Update
+									</button>
+
+									<button
+										className="remove-btn"
+										onClick={() => onImageRemove(index)}>
+										Remove
+									</button>
+
+									{imageList.length > 0 ? (
+										<button
+											className="analyze-btn"
+											onClick={() => onSubmit(onImageRemove)}>
+											{receiptUploading ? `Uploading...` : `Analyze Receipt`}
+										</button>
+									) : null}
+								</div>
+							</div>
+						))
+					)}
 				</div>
 			)}
 		</ImageUploading>
