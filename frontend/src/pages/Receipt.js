@@ -3,15 +3,12 @@ import { useParams } from "react-router-dom";
 
 import axios from "axios";
 
-import "./Receipt.css";
+import "../styles/Receipt.css";
 
 const API_URL = "http://localhost:5000";
 
 const Receipt = ({ token, user }) => {
 	const [receipt, setReceipt] = useState({});
-	// Theres also a numPeople state in App.js
-	// Need to change to use only 1 state at some point
-	// const [people, setPeople] = useState(receipt["num_people"]);
 	const { id } = useParams();
 
 	useEffect(() => {

@@ -3,7 +3,7 @@ import axios from "axios";
 import jwt from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
-import "./Login.css";
+import "../styles/Login.css";
 
 const API_URL = "http://localhost:5000";
 
@@ -15,7 +15,6 @@ const Signup = ({ addToken }) => {
 		const [val, setVal] = useState(initialVal);
 		const handleChange = (e) => {
 			setVal(e.target.value);
-			// console.log(e.target.name, ": ", val);
 		};
 		const reset = () => {
 			setVal("");

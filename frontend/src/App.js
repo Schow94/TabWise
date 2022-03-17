@@ -3,15 +3,15 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import jwt from "jwt-decode";
 import axios from "axios";
 
-import "./App.css";
+import "./styles/App.css";
 
-import Landing from "./Landing";
-import Navbar from "./Navbar";
-import Review from "./Review";
-import Login from "./Login";
-import Signup from "./Signup";
-import Receipts from "./Receipts";
-import Receipt from "./Receipt";
+import Landing from "./pages/Landing";
+import Navbar from "./components/Navbar";
+import Review from "./pages/Review";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Receipts from "./components/Receipts";
+import Receipt from "./pages/Receipt";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -19,7 +19,6 @@ const App = () => {
 	const [token, setToken] = useState("");
 	const [user, setUser] = useState({});
 	const [receipt, setReceipt] = useState({});
-	// const [receipts, setReceipts] = useState({});
 	const [numPeople, setNumPeople] = useState(1);
 	const [receiptUploading, setReceiptUploading] = useState(false);
 
@@ -75,7 +74,6 @@ const App = () => {
 		const decodedEmail = decodedToken.email;
 
 		setUser({ id: decodedId, username: decodedUser });
-		// store returned user somehow
 	};
 
 	const logout = () => {
@@ -99,9 +97,7 @@ const App = () => {
 			}
 		});
 
-		// const newReceipt = receipt;
 		copy["line_items"] = newItems;
-		// console.log("Changed Receipt: ", copy);
 		setReceipt(copy);
 	};
 

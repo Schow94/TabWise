@@ -1,8 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import Upload from "./Upload";
+import Upload from "../components/Upload";
 
-import "./Landing.css";
+import "../styles/Landing.css";
 const Landing = ({
 	user,
 	token,
@@ -86,12 +85,6 @@ const Landing = ({
 								</p>
 							</div>
 						</div>
-
-						{/* <div className="testimonal-container">
-
-							<div className="testimonial-box">
-							</div>
-						</div> */}
 					</div>
 				)}
 			</div>

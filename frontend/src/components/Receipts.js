@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { confirmAlert } from "react-confirm-alert"; // Import
-import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import { Link, useParams } from "react-router-dom";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 import axios from "axios";
 import { BsTrash } from "react-icons/bs";
 import Pagination from "./Pagination";
 
-import "./Receipts.css";
+import "../styles/Receipts.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
 const EMAIL_API_URL = process.env.REACT_APP_EMAIL_API_URL;
@@ -35,9 +35,7 @@ const Receipts = ({ token, user }) => {
 
 		const response = await axios.delete(`${API_URL}/receipt/${receipt_id}`);
 
-		// Change this to only delete status 200
 		if (response) {
-			// Use filter to remove receipt from state
 			const newReceipts = receipts.filter((x) => x.receipt_id !== receipt_id);
 			setReceipts(newReceipts);
 		}
@@ -79,7 +77,6 @@ const Receipts = ({ token, user }) => {
 							size={30}
 							className="trash-icon"
 							onClick={(e) => submit(e, r.receipt_id)}
-							// onClick={submit}
 						/>
 					</td>
 				</tr>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
-import "./Login.css";
+import "../styles/Login.css";
 
 const Login = ({ login }) => {
 	let navigate = useNavigate();
@@ -21,16 +21,13 @@ const Login = ({ login }) => {
 	// Hook for each input
 	const [usernameInput, handleUsernameChange, resetUsername] =
 		useInputState("");
-	// const [emailInput, handleEmailChange, resetEmail] = useInputState("");
 	const [passwordInput, handlePasswordChange, resetPassword] =
 		useInputState("");
 
 	const handleSubmit = (e) => {
 		login(e, usernameInput, passwordInput);
 		navigate("/");
-		//Clear form - This doesn't work
 		resetUsername();
-		// resetEmail();
 		resetPassword();
 	};
 
@@ -60,7 +57,7 @@ const Login = ({ login }) => {
 
 				<button className="create-account-btn">
 					<Link className="create-account" to="/signup">
-						Sign Up{" "}
+						Sign Up
 					</Link>
 				</button>
 			</div>

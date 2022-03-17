@@ -184,10 +184,8 @@ func Login(c *gin.Context) {
 		log.Fatal(err)
 	}
 
-	// fmt.Println("PROVIDED USER: ", u.Username)
 	// Query db for that username (unique)
 	db.Where("username = ?", u.Username).First(&foundUser)
-	// fmt.Println("FOUND USER: ", foundUser)
 	// Compare hashed pw to pw provided by person
 	// If hash is valid, issue JWT to user
 
@@ -240,8 +238,6 @@ func SignUp(c *gin.Context) {
 		})
 		log.Fatal(err)
 	}
-
-	fmt.Println("HASH: ", string(hashedPw))
 
 	// Need to add logic to check if the user already has an account
 	// Send message to user saying that they already have an account
@@ -332,7 +328,6 @@ func GetReceipts(c *gin.Context) {
 	fmt.Println("GET RECEIPTS ROUTE")
 
 	user_id := c.Param("id")
-	fmt.Println("URL PARAMS: ", user_id)
 
 	// Initialize Postgres db
 	db, err := gorm.Open(postgres.New(postgres.Config{
@@ -390,7 +385,6 @@ func GetReceipts(c *gin.Context) {
 	// Implement similar logic to getting a single receipt
 	// Use user_id to get receipts for only that user
 
-	// extractedData := findReceipts()
 	c.JSON(http.StatusOK, receipts)
 }
 
@@ -420,12 +414,6 @@ func GetReceipt(c *gin.Context) {
 	db.Find(&receipt, receipt_id)
 	db.Find(&items, "receipt_id = ?", receipt_id)
 
-	// s, _ := json.MarshalIndent(receipt, "", "\t")
-	// fmt.Print("RECEIPT: ", string(s))
-
-	// f, _ := json.MarshalIndent(items, "", "\t")
-	// fmt.Print("ITEMS: ", string(f))
-
 	// Construct json object to send back to frontend
 	foundReceipt := &FoundReceipt{}
 	foundReceipt.Receipt = receipt
@@ -434,7 +422,6 @@ func GetReceipt(c *gin.Context) {
 	l, _ := json.MarshalIndent(foundReceipt, "", "\t")
 	fmt.Print("ITEMS: ", string(l))
 
-	// extractedData := extractReceipt()
 	c.JSON(http.StatusOK, foundReceipt)
 }
 
@@ -466,9 +453,6 @@ func RemoveReceipt(c *gin.Context) {
 // Add Receipt to dbs
 func saveReceipt(c *gin.Context) {
 	var incomingReceipt AddReceipt // u is json we receive from POST request
-
-	// s, _ := json.MarshalIndent(incomingReceipt, "", "\t")
-	// fmt.Print("INCOMING RECEIPT: ", string(s))
 
 	if err := c.BindJSON(&incomingReceipt); err != nil {
 		print("ERROR: ", err)
@@ -504,9 +488,6 @@ func saveReceipt(c *gin.Context) {
 		Payment:          incomingReceipt.Payment,
 	}
 
-	// f, _ := json.MarshalIndent(newReceipt, "", "\t")
-	// fmt.Print("NEW RECEIPT: ", string(f))
-
 	// Create new receipt in dB
 	addReceipt := db.Create(&newReceipt)
 
@@ -522,9 +503,6 @@ func saveReceipt(c *gin.Context) {
 
 	// Save AddReceipt.LineItems to Items struct
 	items := incomingReceipt.Line_Items
-
-	// l, _ := json.MarshalIndent(items, "", "\t")
-	// fmt.Print("LINE ITEMS: ", string(l))
 
 	numItems := len(items)
 
@@ -550,8 +528,6 @@ func saveReceipt(c *gin.Context) {
 // -------------------------- MAIN  --------------------------
 func main() {
 	router := gin.Default()
-
-	// router.Use(cors.Default())
 
 	// Had to enable Authorization header in CORS
 	router.Use(cors.New(cors.Config{

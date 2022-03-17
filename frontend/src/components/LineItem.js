@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 const Lineitem = ({
 	changeLineInput,
 	setReceipt,
@@ -45,7 +43,7 @@ const Lineitem = ({
 					name="item_ppp"
 					className="receipt-input"
 					onChange={changeLineInput(id)}
-					value={item.item_ppp / numPeople}></input>
+					value={(item.item_ppp / numPeople).toFixed(2)}></input>
 			</td>
 		</tr>
 	);

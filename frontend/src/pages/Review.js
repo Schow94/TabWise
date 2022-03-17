@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AiOutlineCheck } from "react-icons/ai";
 
-import LineItem from "./LineItem";
+import LineItem from "../components/LineItem";
 
-import "./Review.css";
+import "../styles/Review.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
 const EMAIL_API_URL = process.env.REACT_APP_EMAIL_API_URL;
@@ -77,8 +77,10 @@ const Review = ({
 			data: {
 				senderEmail: REACT_APP_SENDER_EMAIL,
 				password: REACT_APP_SENDER_EMAIL_PW,
-				senderName: "Sel",
-				subject: "Long time no see!",
+				senderName: "Stephen",
+				subject: `Bill for ${
+					receipt.vendor_name
+				} - ${receipt.transaction_date.slice(0, 11)}`,
 				body: `Your portion of the bill is $${receipt.receipt_ppp}. You can find the entire tab breakdown here: http://localhost:3000/receipt/${savedReceiptId}`,
 				htmlTemplate: "<h1>{{.PageTitle}}</h1>",
 				recipients: [{ name: name, email: email }],
@@ -141,32 +143,10 @@ const Review = ({
 
 		setSavedReceiptId(res.data["receipt_id"]);
 
-		// if (res) {
 		setSaved(true);
-		// }
-	};
-
-	// Generic input hook
-	const useInputState = (initialVal) => {
-		const [val, setVal] = useState(initialVal);
-		const handleChange = (e) => {
-			setVal(e.target.value);
-			// console.log(e.target.name, ": ", val);
-		};
-		const reset = () => {
-			setVal("");
-		};
-		return [val, handleChange, reset];
 	};
 
 	const changePeople = (e) => {
-		// Proceed only if input is a valid integer
-		// if (
-		// 	!Number.isInteger(parseInt(e.target.value)) ||
-		// 	parseInt(e.target.value) < 0
-		// )
-		// 	return;
-
 		setNumPeople(e.target.value);
 
 		const copy = { ...receipt };
@@ -201,7 +181,9 @@ const Review = ({
 										<div className="total-container">
 											<p>Per person: </p>
 											<div className="total">
-												<p>${receipt["receipt_price"] / numPeople}</p>
+												<p>
+													${(receipt["receipt_price"] / numPeople).toFixed(2)}
+												</p>
 											</div>
 										</div>
 
@@ -276,18 +258,19 @@ const Review = ({
 													className="send-email-btn">
 													Send Email
 												</button>
+												<div className="email-btn-container">
+													<button
+														onClick={(e) => changeNumParticipants(e, "+")}
+														className="recipient-btn">
+														+
+													</button>
 
-												<button
-													onClick={(e) => changeNumParticipants(e, "+")}
-													className="recipient-btn">
-													+
-												</button>
-
-												<button
-													onClick={(e) => changeNumParticipants(e, "-")}
-													className="recipient-btn">
-													-
-												</button>
+													<button
+														onClick={(e) => changeNumParticipants(e, "-")}
+														className="recipient-btn">
+														-
+													</button>
+												</div>
 											</div>
 										</form>
 									</div>

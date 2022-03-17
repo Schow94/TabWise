@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ImageUploading from "react-images-uploading";
 
-import "./Upload.css";
+import "../styles/Upload.css";
 
 const Upload = ({
 	user,
@@ -90,7 +90,6 @@ const Upload = ({
 				isDragging,
 				dragProps,
 			}) => (
-				// write your building UI
 				<div className="upload-body">
 					{imageList.length > 0 ? null : (
 						<button

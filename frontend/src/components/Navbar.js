@@ -2,14 +2,13 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiLogOut } from "react-icons/fi";
 
-import "./Navbar.css";
+import "../styles/Navbar.css";
 
 const Navbar = ({ user, logout, token }) => {
 	const navigate = useNavigate();
 
 	const handleClick = (e) => {
 		e.preventDefault();
-		// For some reason have to refresh page to see logout take effect
 		logout();
 		navigate("/");
 	};
@@ -19,7 +18,6 @@ const Navbar = ({ user, logout, token }) => {
 			<ul>
 				<li>
 					<Link to="/">
-						{/* Need to fix path to tandem.png when not in App.js. Route to image is incorrect */}
 						<img className="logo" alt="logo" src="./tandem.png"></img>
 					</Link>
 				</li>

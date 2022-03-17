@@ -1,26 +1,19 @@
 .bg-body {
-	background-image: url("images/body-bg.png");
+	background-image: url("../images/body-bg.png");
 	min-height: 100%;
 	width: 100%;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	/* background-repeat: repeat; */
-	/* margin-bottom: 5%; */
 }
 
 .review-body {
 	width: 100%;
-	/* height: 100%; */
-	margin-top: 15%;
-	/* background-color: red; */
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	/* background-color: green; */
-	margin-bottom: 5em;
 }
 
 .items {
@@ -28,19 +21,19 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	min-height: 100%;
+	min-height: 90%;
 	width: 68%;
 	background-color: rgb(236, 236, 236);
 	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 	border-radius: 10px;
 	padding-bottom: 2em;
+	margin-bottom: 1em;
 }
 
 .review-bottom-container {
 	width: 100%;
 	display: flex;
 	flex-direction: row;
-	/* background-color: blue; */
 	justify-content: space-around;
 }
 
@@ -58,10 +51,10 @@
 	background-color: rgb(236, 236, 236);
 	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 	border-radius: 10px;
+	margin-bottom: 1em;
 }
 
 .receipt-img {
-	/* width: 300px; */
 	height: 300px;
 	border-radius: 20px;
 	margin: 2em;
@@ -88,7 +81,6 @@ tbody {
 tr {
 	width: 100%;
 	display: flex;
-	/* justify-content: start; */
 }
 
 th {
@@ -218,12 +210,10 @@ td {
 	height: 30px;
 	padding-left: 1em;
 	font-size: 16px;
-	/* background-color: rgb(243, 242, 242); */
 	background-color: white;
 }
 
 .send-email-btn {
-	margin-top: 1em;
 	width: 150px;
 	height: 50px;
 	border-radius: 10px;
@@ -242,7 +232,6 @@ td {
 }
 
 .recipient-btn {
-	margin-right: 1em;
 	width: 30px;
 	height: 30px;
 	border-radius: 10px;
@@ -251,6 +240,7 @@ td {
 	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 	color: white;
 	font-size: 16px;
+	margin-left: 1em;
 }
 
 .recipient-btn:hover {
@@ -265,7 +255,6 @@ td {
 	border-radius: 10px;
 	border: none;
 	box-shadow: -2px px #ececec;
-	/* background-color: rgb(243, 242, 242); */
 	background-color: white;
 	padding-left: 1em;
 	font-size: 16px;
@@ -308,10 +297,18 @@ td {
 	justify-content: space-around;
 }
 
+.email-btn-container {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	flex-direction: center;
+}
+
 .email-btns {
 	display: flex;
 	flex-direction: row;
-	justify-content: center;
+	justify-content: space-around;
 	align-items: center;
-	/* background-color: green; */
+	margin-top: 2em;
+	margin-bottom: 1em;
 }

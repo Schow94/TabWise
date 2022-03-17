@@ -1,15 +1,5 @@
-/* .landing-body {
-	background-image: url("images/body-bg.png");
-	height: 100%;
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-} */
-
 .login-bg {
-	background-image: url("images/login-bg.png");
+	background-image: url("../images/login-bg.png");
 	height: 100%;
 	width: 100%;
 	background-position: center;
@@ -25,9 +15,6 @@
 .top {
 	text-align: center;
 	position: absolute;
-	/* bottom: 0; */
-	/* top: 50%; */
-	/* left: 50%; */
 	color: white;
 	font-size: 30px;
 }
@@ -40,9 +27,7 @@
 	align-items: center;
 	width: 25%;
 	height: 40%;
-	/* background-color: rgb(219, 219, 219, 0.8); */
 	border-radius: 10px;
-	/* transform: translate(0%, 25%); */
 }
 
 .form-container {
