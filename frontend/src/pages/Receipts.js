@@ -5,12 +5,11 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 
 import axios from "axios";
 import { BsTrash } from "react-icons/bs";
-import Pagination from "./Pagination";
+import Pagination from "../components/Pagination";
 
 import "../styles/Receipts.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
-const EMAIL_API_URL = process.env.REACT_APP_EMAIL_API_URL;
 
 const Receipts = ({ token, user }) => {
 	const [receipts, setReceipts] = useState([]);
@@ -26,13 +25,10 @@ const Receipts = ({ token, user }) => {
 
 	const getReceipts = async () => {
 		const response = await axios.get(`${API_URL}/receipts/${id}`);
-		console.log("RECEIPTS: ", response);
 		setReceipts(response.data);
 	};
 
 	const onDelete = async (receipt_id) => {
-		console.log(receipt_id);
-
 		const response = await axios.delete(`${API_URL}/receipt/${receipt_id}`);
 
 		if (response) {
@@ -44,7 +40,6 @@ const Receipts = ({ token, user }) => {
 	const submit = (e, receipt_id) => {
 		e.preventDefault();
 
-		console.log(receipt_id);
 		confirmAlert({
 			title: "Confirm to submit",
 			message: "Are you sure to do this.",

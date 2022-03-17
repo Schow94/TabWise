@@ -1,11 +1,10 @@
 import { useState } from "react";
 import axios from "axios";
-import jwt from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
 import "../styles/Login.css";
 
-const API_URL = "http://localhost:5000";
+const API_URL = process.env.REACT_APP_API_URL;
 
 const Signup = ({ addToken }) => {
 	let navigate = useNavigate();
@@ -47,13 +46,6 @@ const Signup = ({ addToken }) => {
 
 		addToken(token);
 
-		const decodedToken = jwt(token);
-		const decodedId = decodedToken.Id;
-		const decodedUser = decodedToken.username;
-		const decodedEmail = decodedToken.email;
-		// store returned user somehow
-
-		//Clear form - This doesn't work
 		resetEmail();
 		resetUsername();
 		resetPassword();

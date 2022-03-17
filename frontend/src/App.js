@@ -3,15 +3,16 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import jwt from "jwt-decode";
 import axios from "axios";
 
-import "./styles/App.css";
-
 import Landing from "./pages/Landing";
-import Navbar from "./components/Navbar";
-import Review from "./pages/Review";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import Receipts from "./components/Receipts";
+import Review from "./pages/Review";
+import Receipts from "./pages/Receipts";
 import Receipt from "./pages/Receipt";
+
+import Navbar from "./components/Navbar";
+
+import "./styles/App.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -80,7 +81,6 @@ const App = () => {
 		localStorage.removeItem("token");
 		setToken("");
 		setUser({});
-		console.log("LOGGING OUT");
 	};
 
 	const changeLineInput = (id) => (e) => {

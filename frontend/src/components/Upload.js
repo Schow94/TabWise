@@ -5,6 +5,8 @@ import ImageUploading from "react-images-uploading";
 
 import "../styles/Upload.css";
 
+const REACT_APP_OCR_API_URL = process.env.REACT_APP_OCR_API_URL;
+
 const Upload = ({
 	user,
 	numPeople,
@@ -30,7 +32,7 @@ const Upload = ({
 		// OCR Microservice
 		const response = await axios({
 			method: "post",
-			url: `http://localhost:8000/parse_receipt`,
+			url: `${REACT_APP_OCR_API_URL}/parse_receipt`,
 			data: formData,
 			headers: {
 				"Content-Type": "multipart/form-data",

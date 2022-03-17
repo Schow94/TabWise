@@ -5,7 +5,7 @@ import axios from "axios";
 
 import "../styles/Receipt.css";
 
-const API_URL = "http://localhost:5000";
+const API_URL = process.env.REACT_APP_API_URL;
 
 const Receipt = ({ token, user }) => {
 	const [receipt, setReceipt] = useState({});
