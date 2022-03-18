@@ -8,9 +8,6 @@
 
 ![Screen Shot 2022-03-18 at 4 25 16 PM](https://user-images.githubusercontent.com/24352472/159096549-fac488dc-2e4f-4673-9895-62f1706bf38a.png)
 
-### Receipt Upload
-
-![Screen Shot 2022-02-18 at 9 47 30 PM](https://user-images.githubusercontent.com/24352472/154788259-9895627c-701f-4464-b943-9599fcbe4d90.png)
 
 ### Login Page
 
@@ -18,6 +15,10 @@
 
 ### How to Use
 ![How to Use](https://user-images.githubusercontent.com/24352472/159096860-3f07d17c-c1b1-41ea-bfed-29fed6afbc1e.png)
+
+
+### Receipt Upload
+![Upload](https://user-images.githubusercontent.com/24352472/159096963-86e55dc0-98fc-4a66-bc79-08f20b79e14c.png)
 
 
 ### Extracting Data
