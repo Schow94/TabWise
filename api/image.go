@@ -18,6 +18,7 @@ type Image struct {
 	FileData *multipart.FileHeader `form:"file"`
 }
 
+// ----------------------- IMAGE UPLOAD ROUTE -----------------------
 func ImageUpload(c *gin.Context) {
 	fmt.Println("IMAGE ROUTE!!!")
 
